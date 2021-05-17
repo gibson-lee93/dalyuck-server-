@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Delete } from '@nestjs/common';
 import { CalendarService } from './calendar.service';
 import { CreateCalendarDto } from './dto/create-calendar.dto';
 import { Calendar } from './calendar.entity';
@@ -22,5 +22,10 @@ export class CalendarController {
     @Body('colour') colour?: string
   ): Promise<Calendar> {
     return this.calendarService.updateCalendar(calendarId, calendarName, description, colour);
+  }
+
+  @Delete()
+  deleteCalendar(@Body('calendarId') calendarId: number): Promise<void> {
+    return this.calendarService.deleteCalendar(calendarId);
   }
 }
