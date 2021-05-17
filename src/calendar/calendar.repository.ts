@@ -23,4 +23,24 @@ export class CalendarRepository extends Repository<Calendar> {
 
     return calendar;
   }
+
+  async updateCalendar(
+    calendarId: number,
+    calendarName? : string,
+    description? : string,
+    colour? : string
+  ): Promise<Calendar> {
+    const calendar = await this.findOne({ id: calendarId});
+    calendar.calendarName = calendarName ? calendarName : calendar.calendarName;
+    calendar.description = description ? description : calendar.description;
+    calendar.colour = colour ? colour : calendar.colour;
+
+    try{
+      await calendar.save();
+    } catch(err) {
+      throw new InternalServerErrorException('Server error occurred');
+    }
+
+    return calendar;
+  }
 }

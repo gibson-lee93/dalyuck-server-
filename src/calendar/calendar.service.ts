@@ -14,4 +14,13 @@ export class CalendarService {
   async createCalendar(createCalendarDto: CreateCalendarDto): Promise<Calendar> {
     return this.calendarRepository.createCalendar(createCalendarDto);
   }
+
+  async updateCalendar(
+    calendarId: number,
+    calendarName? : string,
+    description? : string,
+    colour? : string
+  ): Promise<Calendar> {
+    return this.calendarRepository.updateCalendar(calendarId, calendarName, description, colour);
+  }
 }
