@@ -9,16 +9,16 @@ export const createToken = (
 
 }
 
-export const checkToken = (token : string, salt : string) : any => {
+export const checkToken = (token : string, userId : number, userDB: any) : any => {
     try{
         console.log("checkToken",token)
-        console.log("salt : ", salt);
+        console.log("userId : ", userId);
         // verify에서 에러 발생시 catch으로 이동
 
         // 유저아이디로 salt값 검색
-        // jwt verify
+        const dbSalt = (userDB.find((ele) => ele.userId === userId)).salt;
 
-        const decode = jwt.verify(token,salt);
+        const decode = jwt.verify(token,dbSalt);
         console.log(decode);
         // const decode = jwt.verify(token, salt);
         // console.log("decode : ",decode)

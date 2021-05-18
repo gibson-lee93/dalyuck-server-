@@ -21,6 +21,7 @@ export class UserService {
     email : string,
   ) : any{
       // email유효성 검사 코딩 필요(DB구축후) : for루프는 임시!
+      // user.find
       for(let i : number = 0; i < this.userDB.length; i++){
         if(email === this.userDB[i].email){
           console.log("error : ", 401,"email already exist")
@@ -79,7 +80,7 @@ export class UserService {
       }
 
       const token = headers.authorization.split(" ")[1];
-      const decode = checkToken(token, found.salt);
+      const decode = checkToken(token, userId, this.userDB);
       // console.log("decode : ",decode)
       console.log("헤더 체크 : ", token);
       
@@ -110,8 +111,6 @@ export class UserService {
         this.userDB = [...this.userDB, found];
 
 
-
-
         return {user : found, message : "userinfo updated"};
       }
     }
@@ -132,7 +131,7 @@ export class UserService {
     try{
       const found = this.userDB.find(ele => ele.userId === userId);
       const token = headers.authorization.split(" ")[1];
-      const decode = checkToken(token, found.salt);
+      const decode = checkToken(token, userId, this.userDB);
 
       // token쪽에서 error가 발생시
       if(decode.error){

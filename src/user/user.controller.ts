@@ -87,7 +87,13 @@ export class UserController {
   ){
     console.log("password" , password);
 
-    return this.userService.deleteUserInfo(userId,password,headers);
+    const deleteUser = this.userService.deleteUserInfo(userId,password,headers);
+
+    if(deleteUser.error){
+      throw new HttpException(deleteUser.message, deleteUser.error);
+    }
+
+    return deleteUser;
 
   }
 
