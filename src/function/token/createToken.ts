@@ -1,24 +1,31 @@
 const jwt = require("jsonwebtoken");
+import { User } from "../../user/user.entity";
 
 export const createToken = (
         payload : object, //여기에는 userId와 email만 들어간다.
         salt : string, 
         expiresIn : object) : string => {
-
-        return jwt.sign(payload, salt, expiresIn);
+        const tokenValue = jwt.sign(payload, salt, expiresIn);
+        console.log("tokenValue : ", tokenValue);
+        return tokenValue;
 
 }
 
-export const checkToken = (token : string, userId : number, userDB: any) : any => {
+export const checkToken = async (token : string, userId : number) : Promise<any> => {
+
+    let decode : string;
+
     try{
         console.log("checkToken",token)
         console.log("userId : ", userId);
         // verify에서 에러 발생시 catch으로 이동
 
         // 유저아이디로 salt값 검색
-        const dbSalt = (userDB.find((ele) => ele.userId === userId)).salt;
+        const user = await User.findOne({id:userId});
+        // const  = user.findOne()
+        const dbSalt = user.salt;
 
-        const decode = jwt.verify(token,dbSalt);
+        decode = jwt.verify(token,dbSalt);
         console.log(decode);
         // const decode = jwt.verify(token, salt);
         // console.log("decode : ",decode)
