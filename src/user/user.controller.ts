@@ -19,7 +19,18 @@ export class UserController {
   // 등록되어있는 전체 유저를 확인한다.
   @Get()
   async userGet(){
+    console.log("userGet active");
     return this.userService.postUser();
+  }
+
+  // 등록되어있는 전체 유저를 확인한다.
+  @Get('info')
+  async userOneGet(
+    @Body('userId') userId : number,
+    @Headers() headers
+  ){
+    console.log("userOneGet active");
+    return await this.userService.checkOneUser(headers, userId );
   }
 
   // 회원가입을 한다.
@@ -36,15 +47,25 @@ export class UserController {
       
   ) {
 
-        const userData = this.userService.insertUser(
+        const userData = await this.userService.insertUser(
           completeBody.userName,
           completeBody.password,
           completeBody.email
         );
+        
+        console.log("8- userData Pass");
 
         // express문법으로 response
         res.set('Authorization', 'Bearer ' + userData.token);
-        res.send({message : "userinfo updated"})
+        res.send({
+                    data : {
+                      userId : userData.id,
+                      userName : userData.userName
+                    },
+                    message : "userinfo updated"
+        })
+        console.log("9- userData Pass");
+        // return userData;
 
   }
 
@@ -58,10 +79,10 @@ export class UserController {
       newPassword : string
     },
     @Headers() headers
-  ){
+  ) : Promise <any> {
     const {userId,userName,oldPassword,newPassword} = completeBody;
 
-    const result = this.userService.editUserInfo(userId, oldPassword, newPassword,userName,headers);
+    const result = await this.userService.editUserInfo(userId, oldPassword, newPassword,userName,headers);
     console.log("result : ", result);
 
     // 에러 발생시 if문 실행
@@ -75,7 +96,7 @@ export class UserController {
       }
       
     }
-    throw new HttpException("userinfo updated", 201);
+    throw new HttpException("userinfo updated", 200);
 
   }
 
@@ -84,11 +105,15 @@ export class UserController {
     @Body('userId') userId : number,
     @Body('password') password : string,
     @Headers() headers
-  ){
+  ) : Promise <any> {
     console.log("password" , password);
 
-    const deleteUser = this.userService.deleteUserInfo(userId,password,headers);
 
+    // return await this.userService.deleteUserInfo(userId,password,headers);
+
+    const deleteUser = await this.userService.deleteUserInfo(userId,password,headers);
+
+    console.log("deleteUser : ", deleteUser);
     if(deleteUser.error){
       throw new HttpException(deleteUser.message, deleteUser.error);
     }
