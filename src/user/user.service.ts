@@ -34,7 +34,18 @@ export class UserService {
       throw new UnauthorizedException(checkHeaderToken.message);
     }
 
-    return await this.userRepository.findOne({id : checkHeaderToken.userId})
+    // 해당 userId를 찾아서 해당 캘린더 정보를 모두 보내준다.
+    const result =  await this.userRepository.findOne({
+      where:{id : checkHeaderToken.userId},
+      relations:["calendar"]
+    })
+
+    delete result.password;
+    delete result.salt;
+    delete result.token;
+
+    return result;
+
   }
 
   // Controller에서 회원정보 등록 요청시 method
