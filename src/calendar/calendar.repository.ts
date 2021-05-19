@@ -7,13 +7,15 @@ import { InternalServerErrorException } from '@nestjs/common';
 export class CalendarRepository extends Repository<Calendar> {
 
   async createCalendar(
-    createCalendarDto: CreateCalendarDto
+    createCalendarDto: CreateCalendarDto,
+    userId: number
   ): Promise<Calendar> {
     const { calendarName, description } = createCalendarDto;
 
     const calendar = new Calendar();
     calendar.calendarName = calendarName;
     calendar.description = description;
+    calendar.userId = userId;
 
     try {
       await calendar.save();
@@ -25,6 +27,7 @@ export class CalendarRepository extends Repository<Calendar> {
   }
 
   async updateCalendar(
+    userId: number,
     calendarId: number,
     calendarName? : string,
     description? : string,
@@ -34,6 +37,7 @@ export class CalendarRepository extends Repository<Calendar> {
     calendar.calendarName = calendarName ? calendarName : calendar.calendarName;
     calendar.description = description ? description : calendar.description;
     calendar.colour = colour ? colour : calendar.colour;
+    calendar.userId = userId;
 
     try{
       await calendar.save();
