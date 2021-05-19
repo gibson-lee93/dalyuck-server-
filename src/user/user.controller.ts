@@ -1,13 +1,14 @@
-import { Controller, 
-          Body, 
+import { Controller,
+          Body,
           Get,
-          Post, 
+          Post,
           HttpException,
           Res,
           Patch,
           Delete,
           Headers,
-          HttpStatus
+          HttpStatus,
+          HttpCode
        } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
@@ -36,7 +37,7 @@ export class UserController {
   // 회원가입을 한다.
   @Post('signup')
   async userSignup(
-    // Client의 Body에서 온 정보를 각각 변수로 
+    // Client의 Body에서 온 정보를 각각 변수로
     // 저장
     @Body() completeBody: {
       userName : string,
@@ -44,7 +45,7 @@ export class UserController {
       email : string
     },
     @Res() res : Response // express문법의 res사용하기위한 코드
-      
+
   ) {
 
         const userData = await this.userService.insertUser(
@@ -52,7 +53,7 @@ export class UserController {
           completeBody.password,
           completeBody.email
         );
-        
+
         console.log("8- userData Pass");
 
         // express문법으로 response
@@ -94,7 +95,7 @@ export class UserController {
       else{
         throw new HttpException(result.message, result.error);
       }
-      
+
     }
     throw new HttpException("userinfo updated", 200);
 
@@ -122,4 +123,12 @@ export class UserController {
 
   }
 
+  @Post('/logout')
+  @HttpCode(200)
+  logOut(
+    @Headers() headers,
+    @Body('userId') userId: number
+  ): Promise<void> {
+    return this.userService.logOut(headers, userId);
+  }
 }

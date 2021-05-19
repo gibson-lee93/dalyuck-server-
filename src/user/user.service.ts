@@ -64,7 +64,7 @@ export class UserService {
       // }
 
       console.log("Input userName : ", userName, typeof userName);
-      
+
 
       const user = new User();
       const userEmailChack = await this.userRepository.findOne({
@@ -119,15 +119,15 @@ export class UserService {
       delete user.password;
       console.log("7- user save pass");
       return user;
-      
+
   }
 
   // Controller에서 회원정보 수정 요청시 method
   async editUserInfo(
-      userId:number, 
-      oldPassword:string, 
+      userId:number,
+      oldPassword:string,
       newPassword:string,
-      userName:string, 
+      userName:string,
       headers: any
       ) : Promise <any>{
     try{
@@ -142,12 +142,12 @@ export class UserService {
       const decode = await checkToken(token, userId);
       // console.log("decode : ",decode)
       console.log("헤더 체크 : ", token);
-      
+
       // userDB에 userId을  못찾으면 if문 실행
       if(!found) return {error: 401, message : "no Id"};
 
       // userDB에 해당 userName의 password와
-      // oldPassword가 다르면 else if문 실행 
+      // oldPassword가 다르면 else if문 실행
       else if(found.password !== oldPassword){
         return {error: 401, message : "unauthorized"};
       }
@@ -173,7 +173,7 @@ export class UserService {
       console.log(err);
       return {error : 500, message : err.message};
     }
-    
+
   }
 
 
@@ -230,6 +230,24 @@ export class UserService {
       return {error : 500, message : err.message};
     }
 
+  }
+
+  async logOut(headers: any, userId: number): Promise<void> {
+    const token = headers.authorization.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    const user = await this.userRepository.findOne({ id: userId });
+    user.token = '';
+
+    try{
+      await user.save();
+    } catch(err) {
+      throw new HttpException("Server error occurred", 500);
+    }
   }
 
 }

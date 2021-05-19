@@ -3,7 +3,7 @@ import { User } from "../../user/user.entity";
 
 export const createToken = (
         payload : object, //여기에는 userId와 email만 들어간다.
-        salt : string, 
+        salt : string,
         expiresIn : object) : string => {
         const tokenValue = jwt.sign(payload, salt, expiresIn);
         console.log("tokenValue : ", tokenValue);
@@ -25,7 +25,7 @@ export const checkToken = async (token : string, userId : number) : Promise<any>
         // const  = user.findOne()
         const dbSalt = user.salt;
 
-        decode = jwt.verify(token,dbSalt);
+        decode = jwt.verify(user.token, dbSalt);
         console.log(decode);
         // const decode = jwt.verify(token, salt);
         // console.log("decode : ",decode)
@@ -36,5 +36,5 @@ export const checkToken = async (token : string, userId : number) : Promise<any>
         const error:number = 401;
         return {error, message : err.message};
     }
-    
+
 }
