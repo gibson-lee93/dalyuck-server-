@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './event.entity';
 import { EventRepository } from './event.repository';
 import { CreateEventDto } from './dto/create-event.dto';
+import { UpdateEventDto } from './dto/update-event.dto';
 import { checkToken } from '../function/token/createToken';
 
 @Injectable()
@@ -25,5 +26,20 @@ export class EventService {
     }
 
     return this.eventRepository.createEvent(createEventDto);
+  }
+
+  async updateEvent(
+    updateEventDto: UpdateEventDto,
+    userId: number,
+    headers: string
+  ): Promise<Event> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    return this.eventRepository.updateEvent(updateEventDto);
   }
 }

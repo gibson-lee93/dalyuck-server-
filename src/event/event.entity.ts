@@ -15,7 +15,10 @@ export class Event extends BaseEntity {
   @Column({ default: 'rgb(121, 134, 203)' })
   colour: string;
 
-  @Column({ default: false })
+  @Column({
+    type: 'boolean',
+    default: false
+  })
   access: boolean;
 
   @Column({ nullable: true })
