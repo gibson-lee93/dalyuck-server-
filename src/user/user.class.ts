@@ -17,7 +17,7 @@ export class User{
     password : string;
     salt : string;
     token : string;
-    
+
 
     constructor(
         userId : number, // DB저장시 PR키
@@ -26,7 +26,7 @@ export class User{
         password : string,
         salt : string,
         token : string
-        
+
         ) {
 
         this.userId = userId;

@@ -1,4 +1,4 @@
-import { Injectable, HttpException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, HttpException, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 // import { User } from './user.class';
 import {createToken, checkToken} from '../function/token/createToken';
@@ -64,7 +64,7 @@ export class UserService {
       // }
 
       console.log("Input userName : ", userName, typeof userName);
-      
+
 
       const user = new User();
       const userEmailChack = await this.userRepository.findOne({
@@ -119,15 +119,46 @@ export class UserService {
       delete user.password;
       console.log("7- user save pass");
       return user;
-      
+
+  }
+
+  async logIn(email: string, password: string): Promise<User> {
+    const user = await this.userRepository.findOne({
+      email: email,
+      password: password
+    });
+
+    if(!user) {
+      throw new NotFoundException('email or password not found');
+    }
+
+    const userId = user.id;
+    const payload = {
+      userId,
+      email
+    };
+
+    user.token = createToken(payload, user.salt, { expiresIn: "1h" });
+    console.log(user.token);
+
+    try{
+      await user.save();
+    }catch(err) {
+      throw new HttpException("Server error occurred", 500);
+    }
+
+    delete user.password;
+    delete user.salt;
+
+    return user;
   }
 
   // Controller에서 회원정보 수정 요청시 method
   async editUserInfo(
-      userId:number, 
-      oldPassword:string, 
+      userId:number,
+      oldPassword:string,
       newPassword:string,
-      userName:string, 
+      userName:string,
       headers: any
       ) : Promise <any>{
     try{
@@ -142,12 +173,12 @@ export class UserService {
       const decode = await checkToken(token, userId);
       // console.log("decode : ",decode)
       console.log("헤더 체크 : ", token);
-      
+
       // userDB에 userId을  못찾으면 if문 실행
       if(!found) return {error: 401, message : "no Id"};
 
       // userDB에 해당 userName의 password와
-      // oldPassword가 다르면 else if문 실행 
+      // oldPassword가 다르면 else if문 실행
       else if(found.password !== oldPassword){
         return {error: 401, message : "unauthorized"};
       }
@@ -173,7 +204,7 @@ export class UserService {
       console.log(err);
       return {error : 500, message : err.message};
     }
-    
+
   }
 
 
