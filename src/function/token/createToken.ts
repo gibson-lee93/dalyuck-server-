@@ -23,6 +23,9 @@ export const checkToken = async (token : string, userId : number) : Promise<any>
         // 유저아이디로 salt값 검색
         const user = await User.findOne({id:userId});
         // const  = user.findOne()
+        if(token !== user.token) {
+          return {error : 401, message : 'token invalid'};
+        }
         const dbSalt = user.salt;
 
         decode = jwt.verify(user.token, dbSalt);
