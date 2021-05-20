@@ -12,6 +12,7 @@ import { Controller,
        } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
+import { User } from './user.entity'
 
 @Controller('user')
 export class UserController {
@@ -68,6 +69,18 @@ export class UserController {
         console.log("9- userData Pass");
         // return userData;
 
+  }
+
+  @Post('/login')
+  async logIn(
+    @Body('email') email: string,
+    @Body('password') password: string,
+    @Res() res : Response
+  ): Promise<any> {
+    const user = await this.userService.logIn(email, password);
+    res.set('Authorization', 'Bearer ' + user.token);
+    delete user.token;
+    res.send(user);
   }
 
   // 회원의 정보를 수정한다.
