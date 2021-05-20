@@ -72,6 +72,7 @@ export class UserController {
   }
 
   @Post('/login')
+  @HttpCode(200)
   async logIn(
     @Body('email') email: string,
     @Body('password') password: string,
