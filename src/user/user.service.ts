@@ -142,7 +142,7 @@ export class UserService {
     console.log(user.token);
 
     try{
-      user.save();
+      await user.save();
     }catch(err) {
       throw new HttpException("Server error occurred", 500);
     }
