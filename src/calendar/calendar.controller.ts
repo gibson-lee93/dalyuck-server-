@@ -1,6 +1,7 @@
 import { Controller, Post, Body, Patch, Delete, Headers } from '@nestjs/common';
 import { CalendarService } from './calendar.service';
 import { CreateCalendarDto } from './dto/create-calendar.dto';
+import { UpdateCalendarDto } from './dto/update-calendar.dto';
 import { Calendar } from './calendar.entity';
 
 @Controller('calendar')
@@ -20,12 +21,9 @@ export class CalendarController {
   updateCalendar(
     @Headers() headers: any,
     @Body('userId') userId: number,
-    @Body('calendarId') calendarId: number,
-    @Body('calendarName') calendarName?: string,
-    @Body('description') description?: string,
-    @Body('colour') colour?: string
+    @Body() updateCalendarDto: UpdateCalendarDto
   ): Promise<Calendar> {
-    return this.calendarService.updateCalendar(userId, headers, calendarId, calendarName, description, colour);
+    return this.calendarService.updateCalendar(userId, headers, updateCalendarDto);
   }
 
   @Delete()
