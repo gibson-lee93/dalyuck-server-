@@ -7,7 +7,8 @@ import { Controller,
           Patch,
           Delete,
           Headers,
-          HttpStatus
+          HttpStatus,
+          HttpCode
        } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
@@ -135,4 +136,12 @@ export class UserController {
 
   }
 
+  @Post('/logout')
+  @HttpCode(200)
+  logOut(
+    @Headers() headers,
+    @Body('userId') userId: number
+  ): Promise<void> {
+    return this.userService.logOut(headers, userId);
+  }
 }

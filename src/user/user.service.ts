@@ -119,9 +119,9 @@ export class UserService {
       delete user.password;
       console.log("7- user save pass");
       return user;
-
   }
 
+  
   async logIn(email: string, password: string): Promise<User> {
     const user = await this.userRepository.findOne({
       email: email,
@@ -261,6 +261,24 @@ export class UserService {
       return {error : 500, message : err.message};
     }
 
+  }
+
+  async logOut(headers: any, userId: number): Promise<void> {
+    const token = headers.authorization.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    const user = await this.userRepository.findOne({ id: userId });
+    user.token = '';
+
+    try{
+      await user.save();
+    } catch(err) {
+      throw new HttpException("Server error occurred", 500);
+    }
   }
 
 }
