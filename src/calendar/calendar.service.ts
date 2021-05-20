@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException, Headers, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Calendar } from './calendar.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CalendarRepository } from './calendar.repository';
 import { CreateCalendarDto } from './dto/create-calendar.dto';
+import { UpdateCalendarDto } from './dto/update-calendar.dto';
 import { checkToken } from '../function/token/createToken';
 
 @Injectable()
@@ -30,10 +31,7 @@ export class CalendarService {
   async updateCalendar(
     userId: number,
     headers: any,
-    calendarId: number,
-    calendarName? : string,
-    description? : string,
-    colour? : string
+    updateCalendarDto: UpdateCalendarDto
   ): Promise<Calendar> {
     const token = headers.authorization.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
@@ -42,7 +40,7 @@ export class CalendarService {
       throw new UnauthorizedException(checkHeaderToken.message);
     }
 
-    return this.calendarRepository.updateCalendar(userId, calendarId, calendarName, description, colour);
+    return this.calendarRepository.updateCalendar(userId, updateCalendarDto);
   }
 
   async deleteCalendar(
@@ -56,7 +54,7 @@ export class CalendarService {
     if(checkHeaderToken.error){
       throw new UnauthorizedException(checkHeaderToken.message);
     }
-    
+
     const result = await this.calendarRepository.delete({ id: calendarId });
 
     if(result.affected === 0) {

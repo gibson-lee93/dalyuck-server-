@@ -1,9 +1,9 @@
-import { 
-        BaseEntity, 
-        Entity, 
-        PrimaryGeneratedColumn, 
-        Column, 
-        OneToMany 
+import {
+        BaseEntity,
+        Entity,
+        PrimaryGeneratedColumn,
+        Column,
+        OneToMany
     } from 'typeorm';
 
 import { Calendar } from "../calendar/calendar.entity";
@@ -28,6 +28,9 @@ export class User extends BaseEntity {
   @Column({nullable:true})
   token: string;
 
-  @OneToMany(type => Calendar, calendar => calendar.user, { eager: true })
+  @OneToMany(type => Calendar, calendar => calendar.user, {
+    eager: true,
+    cascade: true
+   })
   calendar: Calendar[];
 }
