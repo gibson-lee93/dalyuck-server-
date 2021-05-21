@@ -58,7 +58,7 @@ export class CalendarService {
     const result = await this.calendarRepository.delete({ id: calendarId });
 
     if(result.affected === 0) {
-      throw new NotFoundException(`Task with ID "${calendarId}" not found`);
+      throw new NotFoundException(`Calendar with ID "${calendarId}" not found`);
     }
   }
 }

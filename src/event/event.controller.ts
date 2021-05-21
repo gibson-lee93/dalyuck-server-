@@ -25,4 +25,13 @@ export class EventController {
   ): Promise<Event> {
     return this.eventService.updateEvent(updateEventDto, userId, headers);
   }
+
+  @Delete()
+  deleteEvent(
+    @Body('eventId') eventId: number,
+    @Body('userId') userId: number,
+    @Headers('authorization') headers: string
+  ): Promise<void> {
+    return this.eventService.deleteEvent(eventId, userId, headers);
+  }
 }
