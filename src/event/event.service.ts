@@ -42,4 +42,23 @@ export class EventService {
 
     return this.eventRepository.updateEvent(updateEventDto);
   }
+
+  async deleteEvent(
+    eventId: number,
+    userId: number,
+    headers: string
+  ): Promise<void> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    const result = await this.eventRepository.delete({ id: eventId });
+
+    if(result.affected === 0) {
+      throw new NotFoundException(`Event with ID "${eventId}" not found`)
+    }
+  }
 }
