@@ -7,7 +7,8 @@ import { typeOrmConfig } from './config/typeorm.config';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { EventModule } from './event/event.module';
-
+import { TodoListModule } from './todolist/todolist.module';
+import { TodoModule } from './todo/todo.module';
 
 @Module({
   imports: [UserModule,
@@ -16,7 +17,9 @@ import { EventModule } from './event/event.module';
     ConfigModule.forRoot({
       isGlobal: true
     }),
-    EventModule
+    EventModule,
+    TodoListModule,
+    TodoModule
   ],
   controllers: [AppController],
   providers: [AppService],
