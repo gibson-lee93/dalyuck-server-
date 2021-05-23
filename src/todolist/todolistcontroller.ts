@@ -58,7 +58,7 @@ export class TodoListController {
   }
 
   // TodoList를 수정한다.
-  @Put()
+  @Patch()
   async userTodoListUpdate(
     // Client의 Body에서 온 정보를 각각 변수로
     // 저장
