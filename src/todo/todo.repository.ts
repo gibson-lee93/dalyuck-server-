@@ -40,6 +40,7 @@ export class TodoRepository extends Repository<Todo> {
 
   }
 
+
   // Todo를 수정한다.
   async updateTodo(
     todoId: number,
@@ -64,6 +65,7 @@ export class TodoRepository extends Repository<Todo> {
 
 
   }
+
 
   // // TodoList를 삭제한다.
   // async deleteTodo(
