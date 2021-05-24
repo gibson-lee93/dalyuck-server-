@@ -42,7 +42,6 @@ export class TodoListService {
     return result;
   }
 
-
   // Controller에서 TodoList정보 업데이트 요청시 method
   async updateTodoList(
     headers : any,
@@ -63,23 +62,24 @@ export class TodoListService {
     return result;
   }
 
-  // // Controller에서 TodoList정보 삭제 요청시 method
-  // async deleteTodoList(
-  //   headers : any,
-  //   userId : number,
-  //   toDoListId: number
-  // ) : Promise <any>{
-  //   const token = headers.authorization.split(" ")[1];
-  //   const checkHeaderToken = await checkToken(token, userId);
+  // Controller에서 TodoList정보 삭제 요청시 method
+  async deleteTodoList(
+    headers : any,
+    userId : number,
+    toDoListId: number
+  ) : Promise <any>{
+    const token = headers.authorization.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
 
-  //   if(checkHeaderToken.error){
-  //     throw new UnauthorizedException(checkHeaderToken.message);
-  //   }
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
 
-  //   const result = this.todolistRepository.deleteTodoList(toDoListId);
-  //   console.log(result);
+    const result = this.todolistRepository.deleteTodoList(toDoListId);
+    console.log(result);
 
-  //   return result;
-  // }
+    return result;
+  }
+
 
 }
