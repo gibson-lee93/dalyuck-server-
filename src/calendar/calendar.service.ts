@@ -16,9 +16,9 @@ export class CalendarService {
   async createCalendar(
     createCalendarDto: CreateCalendarDto,
     userId: number,
-    headers: any
+    headers: string
   ): Promise<Calendar> {
-    const token = headers.authorization.split(" ")[1];
+    const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
     if(checkHeaderToken.error){
@@ -30,10 +30,10 @@ export class CalendarService {
 
   async updateCalendar(
     userId: number,
-    headers: any,
+    headers: string,
     updateCalendarDto: UpdateCalendarDto
   ): Promise<Calendar> {
-    const token = headers.authorization.split(" ")[1];
+    const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
     if(checkHeaderToken.error){
@@ -44,11 +44,11 @@ export class CalendarService {
   }
 
   async deleteCalendar(
-    headers: any,
+    headers: string,
     userId: number,
     calendarId: number
   ): Promise<void> {
-    const token = headers.authorization.split(" ")[1];
+    const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
     if(checkHeaderToken.error){
@@ -61,4 +61,5 @@ export class CalendarService {
       throw new NotFoundException(`Calendar with ID "${calendarId}" not found`);
     }
   }
+
 }
