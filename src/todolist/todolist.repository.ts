@@ -59,36 +59,37 @@ export class TodoListRepository extends Repository<TodoList> {
 
   }
 
-  // // TodoList를 삭제한다.
-  // async deleteTodoList(
-  //   toDoListId : number
-  // ){
 
-  //   try{
-  //     console.log("1. repository(deleteTodoList) : Start");
-  //     const check = await TodoList.findOne({id : toDoListId});
-  //     console.log("check : ", check);
-  //     if(!check){
-  //       return{ error: 401, message : "TodoList does not exist" };
-  //     }
+  // TodoList를 삭제한다.
+  async deleteTodoList(
+    toDoListId : number
+  ){
 
-  //     const result = await TodoList.delete({id : toDoListId});
-  //       if(result.affected === 0){
-  //         console.log("error1 repository(deleteTodoList) : 삭제가 제대로 안됨");
-  //         // throw new HttpException("User did not delete from the server", 500);
-  //         return {error : 500, message : "TodoList did not delete from the server"};
-  //       }
-  //       // throw new HttpException("User deleted", 200);
-  //       console.log("2. repository(deleteTodoList) : 삭제가 제대로 됨");
-  //       return {status: 200, message : "TodoList deleted"};
-  //       // return "User deleted";
-  //     }
+    try{
+      console.log("1. repository(deleteTodoList) : Start");
+      const check = await TodoList.findOne({id : toDoListId});
+      console.log("check : ", check);
+      if(!check){
+        return{ error: 401, message : "TodoList does not exist" };
+      }
 
-  //   catch(error){
-  //     throw new InternalServerErrorException(error.message);
-  //   }
+      const result = await TodoList.delete({id : toDoListId});
+        if(result.affected === 0){
+          console.log("error1 repository(deleteTodoList) : 삭제가 제대로 안됨");
+          // throw new HttpException("User did not delete from the server", 500);
+          return {error : 500, message : "TodoList did not delete from the server"};
+        }
+        // throw new HttpException("User deleted", 200);
+        console.log("2. repository(deleteTodoList) : 삭제가 제대로 됨");
+        return {status: 200, message : "TodoList deleted"};
+        // return "User deleted";
+      }
+
+    catch(error){
+      throw new InternalServerErrorException(error.message);
+    }
 
 
-  // }
+  }
   
 }
