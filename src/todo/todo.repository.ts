@@ -40,30 +40,32 @@ export class TodoRepository extends Repository<Todo> {
 
   }
 
-  // // Todo를 수정한다.
-  // async updateTodo(
-  //   todoId: number,
-  //   startTime : string,
-  //   toDoName : string,
-  //   description : string
-  // ){
 
-  //   const todo = await this.findOne({ id: todoId});
-  //   todo.startTime = startTime;
-  //   todo.toDoName = toDoName.length !== 0 ? toDoName : todo.toDoName;
-  //   todo.description = description.length !== 0 ? description : todo.description;
+  // Todo를 수정한다.
+  async updateTodo(
+    todoId: number,
+    startTime : string,
+    toDoName : string,
+    description : string
+  ){
 
-  //   try{
-  //     await todo.save();
-  //     return todo;
-  //   }
+    const todo = await this.findOne({ id: todoId});
+    todo.startTime = startTime;
+    todo.toDoName = toDoName.length !== 0 ? toDoName : todo.toDoName;
+    todo.description = description.length !== 0 ? description : todo.description;
 
-  //   catch(error){
-  //     throw new InternalServerErrorException(error.message);
-  //   }
+    try{
+      await todo.save();
+      return todo;
+    }
+
+    catch(error){
+      throw new InternalServerErrorException(error.message);
+    }
 
 
-  // }
+  }
+
 
   // // TodoList를 삭제한다.
   // async deleteTodo(

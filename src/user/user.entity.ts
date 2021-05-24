@@ -41,5 +41,6 @@ eager: true,
 cascade: true
 })
 todolist: TodoList[];
+
 }
 
