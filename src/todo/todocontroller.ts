@@ -63,7 +63,8 @@ export class TodoController {
   }
 
   // Todo를 수정한다.
-  @Put()
+  @Patch()
+
   async userTodoUpdate(
     // Client의 Body에서 온 정보를 각각 변수로
     // 저장
@@ -96,6 +97,7 @@ export class TodoController {
       // return userData;
 
   }
+
 
   // Todo를 삭제한다.
   @Delete()
@@ -139,5 +141,6 @@ export class TodoController {
 
 
   }
+
   
 }

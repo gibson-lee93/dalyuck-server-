@@ -1,4 +1,5 @@
 import {
+
   BaseEntity,
   Entity,
   PrimaryGeneratedColumn,
@@ -7,8 +8,10 @@ import {
   ManyToOne
 } from 'typeorm';
 
+
 import { User } from "../user/user.entity";
 import { Todo } from "../todo/todo.entity";
+
 
 @Entity()
 export class TodoList extends BaseEntity {
@@ -35,4 +38,5 @@ eager: true,
 cascade: true
 })
 todo: Todo[];
+
 }

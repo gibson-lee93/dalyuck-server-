@@ -29,6 +29,7 @@ salt: string;
 @Column({nullable:true})
 token: string;
 
+
 @OneToMany(type => Calendar, calendar => calendar.user, {
 eager: true,
 cascade: true
@@ -41,3 +42,4 @@ cascade: true
 })
 todolist: TodoList[];
 }
+
