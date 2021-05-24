@@ -58,7 +58,7 @@ export class TodoListController {
   }
 
   // TodoList를 수정한다.
-  @Put()
+  @Patch()
   async userTodoListUpdate(
     // Client의 Body에서 온 정보를 각각 변수로
     // 저장
@@ -87,47 +87,48 @@ export class TodoListController {
 
   }
 
-  // TodoList를 삭제한다.
-  @Delete()
-  async userTodoListDelete(
-    // Client의 Body에서 온 정보를 각각 변수로
-    // 저장
-    @Headers() headers,
-    @Body() completeBody: {
-      userId : number,
-      toDoListId : number,
-    },
-    @Res() res : Response
 
-  ) {
+  // // TodoList를 삭제한다.
+  // @Delete()
+  // async userTodoListDelete(
+  //   // Client의 Body에서 온 정보를 각각 변수로
+  //   // 저장
+  //   @Headers() headers,
+  //   @Body() completeBody: {
+  //     userId : number,
+  //     toDoListId : number,
+  //   },
+  //   @Res() res : Response
 
-      const userTodoList = await this.todolistService.deleteTodoList(
-        headers,
-        completeBody.userId,
-        completeBody.toDoListId
-      );
+  // ) {
 
-      if(userTodoList.error){
+  //     const userTodoList = await this.todolistService.deleteTodoList(
+  //       headers,
+  //       completeBody.userId,
+  //       completeBody.toDoListId
+  //     );
+
+  //     if(userTodoList.error){
         
-        res.status(userTodoList.error);
-        res.send({
-          "statusCode" : userTodoList.error,
-          "message" : userTodoList.message
-        })
+  //       res.status(userTodoList.error);
+  //       res.send({
+  //         "statusCode" : userTodoList.error,
+  //         "message" : userTodoList.message
+  //       })
         
-      }
+  //     }
 
-      else if(!userTodoList.error){
+  //     else if(!userTodoList.error){
 
-        res.status(userTodoList.status);
-        res.send({
-          "statusCode" : userTodoList.status,
-          "message" : userTodoList.message
-        })
+  //       res.status(userTodoList.status);
+  //       res.send({
+  //         "statusCode" : userTodoList.status,
+  //         "message" : userTodoList.message
+  //       })
 
-      }
+  //     }
 
 
-  }
-  
+  // }
+
 }
