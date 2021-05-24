@@ -69,23 +69,24 @@ export class TodoService {
   }
 
 
-  // // Controller에서 Todo정보 삭제 요청시 method
-  // async deleteTodo(
-  //   headers : any,
-  //   userId : number,
-  //   todoId: number
-  // ) : Promise <any>{
-  //   const token = headers.authorization.split(" ")[1];
-  //   const checkHeaderToken = await checkToken(token, userId);
+  // Controller에서 Todo정보 삭제 요청시 method
+  async deleteTodo(
+    headers : any,
+    userId : number,
+    todoId: number
+  ) : Promise <any>{
+    const token = headers.authorization.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
 
-  //   if(checkHeaderToken.error){
-  //     throw new UnauthorizedException(checkHeaderToken.message);
-  //   }
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
 
-  //   const result = this.todoRepository.deleteTodo(todoId);
-  //   console.log(result);
+    const result = this.todoRepository.deleteTodo(todoId);
+    console.log(result);
 
-  //   return result;
-  // }
+    return result;
+  }
+
 
 }

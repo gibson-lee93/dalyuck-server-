@@ -62,9 +62,9 @@ export class TodoController {
 
   }
 
-
   // Todo를 수정한다.
   @Patch()
+
   async userTodoUpdate(
     // Client의 Body에서 온 정보를 각각 변수로
     // 저장
@@ -99,47 +99,48 @@ export class TodoController {
   }
 
 
-  // // Todo를 삭제한다.
-  // @Delete()
-  // async userTodoListDelete(
-  //   // Client의 Body에서 온 정보를 각각 변수로
-  //   // 저장
-  //   @Headers() headers,
-  //   @Body() completeBody: {
-  //     userId : number,
-  //     todoId : number,
-  //   },
-  //   @Res() res : Response
+  // Todo를 삭제한다.
+  @Delete()
+  async userTodoListDelete(
+    // Client의 Body에서 온 정보를 각각 변수로
+    // 저장
+    @Headers() headers,
+    @Body() completeBody: {
+      userId : number,
+      todoId : number,
+    },
+    @Res() res : Response
 
-  // ) {
+  ) {
 
-  //     const userTodo = await this.todoService.deleteTodo(
-  //       headers,
-  //       completeBody.userId,
-  //       completeBody.todoId
-  //     );
+      const userTodo = await this.todoService.deleteTodo(
+        headers,
+        completeBody.userId,
+        completeBody.todoId
+      );
 
-  //     if(userTodo.error){
+      if(userTodo.error){
         
-  //       res.status(userTodo.error);
-  //       res.send({
-  //         "statusCode" : userTodo.error,
-  //         "message" : userTodo.message
-  //       })
+        res.status(userTodo.error);
+        res.send({
+          "statusCode" : userTodo.error,
+          "message" : userTodo.message
+        })
         
-  //     }
+      }
 
-  //     else if(!userTodo.error){
+      else if(!userTodo.error){
 
-  //       res.status(userTodo.status);
-  //       res.send({
-  //         "statusCode" : userTodo.status,
-  //         "message" : userTodo.message
-  //       })
+        res.status(userTodo.status);
+        res.send({
+          "statusCode" : userTodo.status,
+          "message" : userTodo.message
+        })
 
-  //     }
+      }
 
 
-  // }
+  }
+
   
 }
