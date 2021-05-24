@@ -9,10 +9,13 @@ import { ConfigModule } from '@nestjs/config';
 import { EventModule } from './event/event.module';
 import { TodoListModule } from './todolist/todolist.module';
 import { TodoModule } from './todo/todo.module';
-
+import { MailerModule } from '@nestjs-modules/mailer';
+import { mailConfig } from './config/mail.config';
+import { RequestEmailModule } from './request-email/request-email.module';
 
 @Module({
-  imports: [UserModule,
+  imports: [
+    UserModule,
     CalendarModule,
     TypeOrmModule.forRoot(typeOrmConfig),
     ConfigModule.forRoot({
@@ -20,8 +23,9 @@ import { TodoModule } from './todo/todo.module';
     }),
     EventModule,
     TodoListModule,
-    TodoModule
-
+    TodoModule,
+    MailerModule.forRoot(mailConfig),
+    RequestEmailModule
   ],
   controllers: [AppController],
   providers: [AppService],

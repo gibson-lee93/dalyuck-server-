@@ -7,7 +7,6 @@ import { InternalServerErrorException } from '@nestjs/common';
 @EntityRepository(Event)
 export class EventRepository extends Repository<Event> {
 
-
   async createEvent(createEventDto: CreateEventDto): Promise<Event> {
     const {
       calendarId, startTime, endTime,

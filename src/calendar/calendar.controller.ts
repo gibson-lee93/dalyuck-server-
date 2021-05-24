@@ -12,14 +12,14 @@ export class CalendarController {
   createCalendar(
     @Body() createCalendarDto: CreateCalendarDto,
     @Body('userId') userId: number,
-    @Headers() headers: any
+    @Headers('authorization') headers: string
   ): Promise<Calendar> {
     return this.calendarService.createCalendar(createCalendarDto, userId, headers);
   }
 
   @Patch()
   updateCalendar(
-    @Headers() headers: any,
+    @Headers('authorization') headers: string,
     @Body('userId') userId: number,
     @Body() updateCalendarDto: UpdateCalendarDto
   ): Promise<Calendar> {
@@ -28,10 +28,11 @@ export class CalendarController {
 
   @Delete()
   deleteCalendar(
-    @Headers() headers: any,
+    @Headers('authorization') headers: string,
     @Body('userId') userId: number,
     @Body('calendarId') calendarId: number
   ): Promise<void> {
     return this.calendarService.deleteCalendar(headers, userId, calendarId);
   }
+
 }
