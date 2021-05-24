@@ -10,6 +10,7 @@ import {
 import { User } from "../user/user.entity";
 import { Todo } from "../todo/todo.entity";
 
+
 @Entity()
 export class TodoList extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -35,4 +36,5 @@ export class TodoList extends BaseEntity {
     cascade: true
    })
   todo: Todo[];
+
 }
