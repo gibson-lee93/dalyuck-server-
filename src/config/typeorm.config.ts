@@ -1,8 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 require('dotenv').config()
 
-console.log("env :  ", process.env);
-
 export const typeOrmConfig:any = {
   type: process.env.DATABASE_TYPE,
   host: process.env.DATABASE_HOST,
