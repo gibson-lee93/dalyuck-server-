@@ -15,7 +15,7 @@ export const mailConfig:any = {
     from: `"No Reply" <noreply@dalyuck.com>`
   },
   template: {
-    dir: join(__dirname, 'templates'),
+    dir: join(__dirname, '../request-email/templates/'),
     adapter: new HandlebarsAdapter(),
     options: {
       strict: true

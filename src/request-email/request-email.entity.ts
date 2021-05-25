@@ -6,10 +6,10 @@ export class RequestEmail extends BaseEntity {
   id: number;
 
   @Column()
-  requestId: number;
+  requesterEmail: string;
 
   @Column()
-  respondId: number;
+  requesteeEmail: string;
 
   @Column({ nullable: true })
   calendarId: number;
