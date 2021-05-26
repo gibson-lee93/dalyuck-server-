@@ -13,4 +13,7 @@ export class RequestEmail extends BaseEntity {
 
   @Column({ nullable: true })
   calendarId: number;
+
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
+  date: string;
 }
