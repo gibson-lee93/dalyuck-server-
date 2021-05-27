@@ -55,19 +55,20 @@ export class UserController {
           completeBody.email
         );
 
-        console.log("8- userData Pass");
 
         // express문법으로 response
         res.set('Authorization', 'Bearer ' + userData.token);
         res.send({
-                    data : {
-                      userId : userData.id,
-                      userName : userData.userName
-                    },
-                    message : "userinfo updated"
+
+            userId : userData.id,
+            userName : userData.userName,
+            email : userData.email,
+            calender:[],
+            toDoList:[],
+            message : "userinfo updated"
+            
         })
-        console.log("9- userData Pass");
-        // return userData;
+
 
   }
 
