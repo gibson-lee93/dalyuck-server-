@@ -81,7 +81,13 @@ export class UserController {
     const user = await this.userService.logIn(email, password);
     res.set('Authorization', 'Bearer ' + user.token);
     delete user.token;
-    res.send(user);
+    res.send({
+      "userId" : user.id,
+      "userName" : user.userName,
+      "email" : user.email,
+      "calendar" : user.calendar,
+      "toDoList" : user.todolist
+    });
   }
 
   // 회원의 정보를 수정한다.
