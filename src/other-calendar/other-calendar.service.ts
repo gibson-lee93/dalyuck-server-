@@ -4,6 +4,7 @@ import { OtherCalendarRepository } from './other-calendar.repository';
 import { OtherCalendar } from './other-calendar.entity';
 import { checkToken } from '../function/token/createToken';
 import { RequestEmail } from '../request-email/request-email.entity';
+import { UpdateOtherCalendarDto } from './dto/update-other-calendar.dto';
 
 @Injectable()
 export class OtherCalendarService {
@@ -30,6 +31,26 @@ export class OtherCalendarService {
       const otherCalendar = await this.otherCalendarRepository.confirmSubscription(requestEmail.calendarId, userId);
       await RequestEmail.delete({ id: requestEmailId });
       return otherCalendar;
+    } catch(err) {
+      console.log(err);
+      throw new InternalServerErrorException('Server error occurred');
+    }
+  }
+
+  async updateOtherCalendar(
+    headers: string,
+    userId: number,
+    updateOtherCalendarDto: UpdateOtherCalendarDto
+  ): Promise<OtherCalendar> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    try{
+      return await this.otherCalendarRepository.updateOtherCalendar(updateOtherCalendarDto);
     } catch(err) {
       console.log(err);
       throw new InternalServerErrorException('Server error occurred');
