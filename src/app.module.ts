@@ -12,6 +12,8 @@ import { TodoModule } from './todo/todo.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { mailConfig } from './config/mail.config';
 import { RequestEmailModule } from './request-email/request-email.module';
+import { OtherCalendarModule } from './other-calendar/other-calendar.module';
+import { OtherEventModule } from './other-event/other-event.module';
 
 @Module({
   imports: [
@@ -25,7 +27,9 @@ import { RequestEmailModule } from './request-email/request-email.module';
     TodoListModule,
     TodoModule,
     MailerModule.forRoot(mailConfig),
-    RequestEmailModule
+    RequestEmailModule,
+    OtherCalendarModule,
+    OtherEventModule
   ],
   controllers: [AppController],
   providers: [AppService],
