@@ -15,8 +15,6 @@ export class RequestEmailService {
     private mailerService: MailerService
   ) {}
 
-
-
   async subscribeCalendar(
     headers: string,
     userId: number,
@@ -49,7 +47,7 @@ export class RequestEmailService {
             requester: requesterEmail,
             url: 'dalyuck.com'
           }
-      })
+      });
     } catch(err) {
       console.log(err);
       throw new InternalServerErrorException('Server error occurred');
