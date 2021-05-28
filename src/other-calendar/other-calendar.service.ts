@@ -56,4 +56,24 @@ export class OtherCalendarService {
       throw new InternalServerErrorException('Server error occurred');
     }
   }
+
+  async deleteOtherCalendar(
+    headers: string,
+    userId: number,
+    otherCalendarId: number
+  ): Promise<void> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    try{
+      return await this.otherCalendarRepository.deleteOtherCalendar(userId, otherCalendarId);
+    } catch(err) {
+      console.log(err);
+      throw new InternalServerErrorException('Server error occurred');
+    }
+  }
 }
