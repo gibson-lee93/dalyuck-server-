@@ -25,7 +25,7 @@ async function bootstrap() {
     // CORS 추가부분 #135-1
     app.enableCors({
       origin : true,
-      methods: 'GET, PATCH, POST, DELET',
+      methods: 'GET, PATCH, POST, DELETE',
       credentials: true,
       exposedHeaders: ['Authorization'],
       allowedHeaders:'Content-Type, Accept, Authorization'
