@@ -17,9 +17,18 @@ async function bootstrap() {
     cert: fs.readFileSync(__dirname + '/cert.pem'),
   }
   const app = await NestFactory.create(AppModule,
+
   {
     httpsOptions
   });
+  // CORS 추가부분 #135
+  app.enableCors({
+    origin: true
+    methods: 'GET,PATCH,POST,DELETE',
+    credentials: true,
+    exposedHeaders: ['Authorization'] // 코드 추가부분
+  });
+    
   await app.listen(3000);
 }
 bootstrap();
