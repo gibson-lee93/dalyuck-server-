@@ -57,3 +57,16 @@ export const addTriggerAfterDeleteEvent = (userId: number, otherCalendarId: numb
     END IF;
   END`
 };
+
+export const addTriggerAfterUpdateOtherCalendar = (userId: number, otherCalendarId: number):string => {
+  return `CREATE TRIGGER after_other_calendar_update_${userId}_${otherCalendarId}
+  AFTER UPDATE
+  ON other_calendar FOR EACH ROW
+  BEGIN
+    IF old.colour <> new.colour THEN
+      UPDATE other_event
+      SET colour=new.colour
+      WHERE otherCalendarId=${otherCalendarId};
+    END IF;
+  END`
+};
