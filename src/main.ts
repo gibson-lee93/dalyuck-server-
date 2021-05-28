@@ -22,13 +22,14 @@ async function bootstrap() {
     {
       httpsOptions
     });
-    // CORS 추가부분 #135
+    // CORS 추가부분 #135-1
     app.enableCors({
-      origin: true,
-      methods: 'GET,PATCH,POST,DELETE',
+      origin : true,
+      methods: 'GET, PATCH, POST, DELET',
       credentials: true,
-      exposedHeaders: ['Authorization'] // 코드 추가부분
-    });
+      exposedHeaders: ['Authorization'],
+      allowedHeaders:'Content-Type, Accept, Authorization'
+    })
     
   await app.listen(3000);
 }
