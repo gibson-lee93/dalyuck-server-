@@ -1,8 +1,7 @@
 import { OtherCalendar } from './other-calendar.entity';
-import { EntityRepository, Repository, getConnection } from 'typeorm';
-import { InternalServerErrorException } from '@nestjs/common';
+import { EntityRepository, Repository } from 'typeorm';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { UpdateOtherCalendarDto } from './dto/update-other-calendar.dto';
-import { OtherEvent } from '../other-event/other-event.entity';
 import {
   addTriggerAfterInsertEvent,
   addTriggerAfterUpdateEvent,
@@ -44,6 +43,26 @@ export class OtherCalendarRepository extends Repository<OtherCalendar> {
     try{
       await otherCalendar.save();
       return await this.findOne({ id: otherCalendarId });
+    } catch(err) {
+      console.log(err);
+      throw new InternalServerErrorException('Server error occurred');
+    }
+  }
+
+  async deleteOtherCalendar(userId: number, otherCalendarId: number): Promise<void> {
+    const result = await this.delete({ id: otherCalendarId });
+
+    if(result.affected === 0) {
+      if(result.affected === 0) {
+        throw new NotFoundException(`Other calendar with ID "${otherCalendarId}" not found`);
+      }
+    }
+
+    try{
+      await this.query(`DROP TRIGGER after_event_insert_${userId}_${otherCalendarId}`);
+      await this.query(`DROP TRIGGER after_event_update_${userId}_${otherCalendarId}`);
+      await this.query(`DROP TRIGGER after_event_delete_${userId}_${otherCalendarId}`);
+      await this.query(`DROP TRIGGER after_other_calendar_update_${userId}_${otherCalendarId}`);
     } catch(err) {
       console.log(err);
       throw new InternalServerErrorException('Server error occurred');
