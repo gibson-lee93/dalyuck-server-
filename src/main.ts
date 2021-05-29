@@ -1,11 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
-// NodeJS에 있는 모든 FileSystem을 
+// NodeJS에 있는 모든 FileSystem을
 // fs로 import 한다.
 import * as fs from 'fs';
-
-
 
 async function bootstrap() {
 

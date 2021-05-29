@@ -14,6 +14,7 @@ import { mailConfig } from './config/mail.config';
 import { RequestEmailModule } from './request-email/request-email.module';
 import { OtherCalendarModule } from './other-calendar/other-calendar.module';
 import { OtherEventModule } from './other-event/other-event.module';
+import { AttendRequestModule } from './attend-request/attend-request.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { OtherEventModule } from './other-event/other-event.module';
     MailerModule.forRoot(mailConfig),
     RequestEmailModule,
     OtherCalendarModule,
-    OtherEventModule
+    OtherEventModule,
+    AttendRequestModule
   ],
   controllers: [AppController],
   providers: [AppService],
