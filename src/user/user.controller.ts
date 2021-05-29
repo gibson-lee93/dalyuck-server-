@@ -168,16 +168,52 @@ export class UserController {
 
   ) {
 
-    await verify(completeBody.idToken)
-      .then(data => {
+    // Client에서 받은 idToken을 검증한다.
+    verify(completeBody.idToken)
+      .then(async (data) => { // 검증완료 : True
         console.log("google OAuth confirm : ", data);
+
+        const userData = await this.userService.insertUser(
+          completeBody.userName,
+          "OAuthUser_Google",
+          completeBody.email
+        )
+        
+        // Client에 줄 Token 셋팅
+        res.set('Authorization', 'Bearer ' + userData.token);
+        // 정상처리로 statusCode는 200
         res.status(200);
-        res.send("ok");
+        // 회원가입한 후이기 때문에 모든 정보를 Client쪽으로 전달
+        res.send({
+          userId : userData.id,
+          userName : userData.userName,
+          email : userData.email,
+          calender:[],
+          toDoList:[],
+          message : "userinfo updated"
+        });
       })
-      .catch(err => {
-        console.log(err);
-        res.status(404);
-        res.send("bad request");
+      .catch(err => { // 검증완료 : False
+        // const errorMessage = err.split(",")[0];
+        let errorMessage:string ;
+        console.log("Google OAuth 2.0 과정중 에러 발생!");
+
+        // 실제 google oauth에서 에러가 난건지 확인
+        if(String(err).includes("Error: ")){
+          res.status(403);
+          res.send({
+            message: "토큰에 문제가 있음",
+            googleMessage: err.toString()
+          });
+        }
+        // google oauth에서 난 에러가 아님
+        else{
+          res.status(500);
+          res.send({
+            message: "Server error occurred"
+          });
+        }
+        
       })
 
         // const userData = await this.userService.insertUser(
