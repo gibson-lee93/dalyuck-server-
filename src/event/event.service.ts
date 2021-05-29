@@ -13,6 +13,27 @@ export class EventService {
     private eventRepository: EventRepository
   ) {}
 
+  async getEvent(
+    headers: string,
+    userId: number,
+    calendarId: number
+  ): Promise<Event[]> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    const result = await this.eventRepository.find({ calendarId });
+
+    if(result.length === 0) {
+      throw new NotFoundException(`Event not found`);
+    }
+
+    return result;
+  }
+
   async createEvent(
     createEventDto: CreateEventDto,
     userId: number,

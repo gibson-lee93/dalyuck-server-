@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Delete, Headers } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Delete, Headers, ParseIntPipe, Param } from '@nestjs/common';
 import { CalendarService } from './calendar.service';
 import { CreateCalendarDto } from './dto/create-calendar.dto';
 import { UpdateCalendarDto } from './dto/update-calendar.dto';
@@ -7,6 +7,14 @@ import { Calendar } from './calendar.entity';
 @Controller('calendar')
 export class CalendarController {
   constructor(private calendarService: CalendarService) {}
+
+  @Get('/:id')
+  getCalendar(
+    @Headers('authorization') headers: string,
+    @Param('id', ParseIntPipe) userId: number,
+  ): Promise<{ calendar: {}, otherCalendars: {}}> {
+    return this.calendarService.getCalendar(headers, userId);
+  }
 
   @Post()
   createCalendar(

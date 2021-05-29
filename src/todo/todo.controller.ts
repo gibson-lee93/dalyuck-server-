@@ -9,7 +9,10 @@ import { Controller,
           Headers,
           HttpStatus,
           HttpCode,
-          Put
+          Put,
+          Param,
+          ParseIntPipe,
+          Query
        } from '@nestjs/common';
 import { Response } from 'express';
 import { TodoService } from './todo.service';
@@ -21,10 +24,13 @@ export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   // 등록되어있는 유저의 TodoList를 확인한다.
-  @Get()
-  async userTodoList(){
-    console.log("userTodo active");
-    return this.todoService.postTodoList();
+  @Get('/:id')
+  async getTodo(
+    @Headers('authorization') headers: string,
+    @Param('id', ParseIntPipe) userId: number,
+    @Query('todolistId', ParseIntPipe) todolistId: number
+  ): Promise<Todo[]> {
+    return this.todoService.getTodo(headers, userId, todolistId);
   }
 
 
@@ -51,10 +57,10 @@ export class TodoController {
           completeBody.startTime,
           completeBody.toDoName,
           completeBody.description,
-          
+
         );
 
-        
+
 
         return {
           "Todo" : userTodo
@@ -120,13 +126,13 @@ export class TodoController {
       );
 
       if(userTodo.error){
-        
+
         res.status(userTodo.error);
         res.send({
           "statusCode" : userTodo.error,
           "message" : userTodo.message
         })
-        
+
       }
 
       else if(!userTodo.error){
@@ -142,5 +148,5 @@ export class TodoController {
 
   }
 
-  
+
 }

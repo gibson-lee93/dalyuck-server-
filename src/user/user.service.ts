@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import {createToken, checkToken} from '../function/token/createToken';
 import { User } from "./user.entity";
 import { UserRepository } from './user.repository';
+import { TodoList } from '../todolist/todolist.entity';
 
 
 @Injectable()
@@ -86,12 +87,19 @@ export class UserService {
       console.log("3- user register pass");
       console.log("user", user);
 
+
+
       try{
         // userDB의 원소갯수를 이용하여 userId(PK ID)를 생성(DB구축시 삭제)
         await user.save();
 
         console.log("4- user save pass");
         const userId = user.id;
+
+        const todoList = new TodoList();
+        todoList.toDoListName = 'Tasks';
+        todoList.userId = user.id;
+        await todoList.save();
 
         //토큰 만들기 위한 준비작업(payload 생성)
         const payload = {
@@ -121,7 +129,7 @@ export class UserService {
       return user;
   }
 
-  
+
   async logIn(email: string, password: string): Promise<User> {
     const user = await this.userRepository.findOne({
       email: email,

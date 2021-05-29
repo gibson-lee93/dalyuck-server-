@@ -14,14 +14,19 @@ export class TodoListService {
   ) {}
   // DB구축전 테스트용 코드(DB설치후 삭제)
   // private userDB: User[] = [];
+  async getTodoList(
+    headers: string,
+    userId: number
+  ): Promise<TodoList[]> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
 
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
 
-  // userDB를 확인하기 위한 method
-  async postTodoList():  Promise <TodoList[]> {
-    return await this.todolistRepository.find()
+    return await this.todolistRepository.find({ userId });
   }
-
-  
 
   // Controller에서 TodoList정보 등록 요청시 method
   async insertTodoList(

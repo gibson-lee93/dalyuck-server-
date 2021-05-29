@@ -16,13 +16,26 @@ export class TodoService {
   // DB구축전 테스트용 코드(DB설치후 삭제)
   // private userDB: User[] = [];
 
+  async getTodo(
+    headers: string,
+    userId: number,
+    todolistId: number
+  ): Promise<Todo[]> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
 
-  // userDB를 확인하기 위한 method
-  async postTodoList():  Promise <Todo[]> {
-    return await this.todoRepository.find()
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    const result = await this.todoRepository.find({ todolistId });
+
+    if(result.length === 0) {
+      throw new NotFoundException(`Todo not found`);
+    }
+
+    return result;
   }
-
-  
 
   // Controller에서 Todo정보 등록 요청시 method
   async insertTodo(
