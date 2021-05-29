@@ -13,6 +13,7 @@ import { Controller,
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { User } from './user.entity'
+import { verify } from '../function/oauth/googleOauth'
 
 @Controller('user')
 export class UserController {
@@ -151,5 +152,54 @@ export class UserController {
     @Body('userId') userId: number
   ): Promise<void> {
     return this.userService.logOut(headers, userId);
+  }
+
+  // Google OAuth 2.0회원가입을 한다.
+  @Post('/oauth/google')
+  async userSignupOauth_Google(
+    // Client의 Body에서 온 정보를 각각 변수로
+    // 저장
+    @Body() completeBody: {
+      idToken: string,
+      userName: string,
+      email: string
+    },
+    @Res() res : Response // express문법의 res사용하기위한 코드
+
+  ) {
+
+    await verify(completeBody.idToken)
+      .then(data => {
+        console.log("google OAuth confirm : ", data);
+        res.status(200);
+        res.send("ok");
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(404);
+        res.send("bad request");
+      })
+
+        // const userData = await this.userService.insertUser(
+        //   completeBody.userName,
+        //   completeBody.password,
+        //   completeBody.email
+        // );
+
+
+        // // express문법으로 response
+        // res.set('Authorization', 'Bearer ' + userData.token);
+        // res.send({
+
+        //     userId : userData.id,
+        //     userName : userData.userName,
+        //     email : userData.email,
+        //     calender:[],
+        //     toDoList:[],
+        //     message : "userinfo updated"
+            
+        // })
+
+
   }
 }
