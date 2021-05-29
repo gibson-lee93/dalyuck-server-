@@ -5,6 +5,7 @@ import { CalendarRepository } from './calendar.repository';
 import { CreateCalendarDto } from './dto/create-calendar.dto';
 import { UpdateCalendarDto } from './dto/update-calendar.dto';
 import { checkToken } from '../function/token/createToken';
+import { OtherCalendar } from '../other-calendar/other-calendar.entity';
 
 @Injectable()
 export class CalendarService {
@@ -12,6 +13,23 @@ export class CalendarService {
     @InjectRepository(CalendarRepository)
     private calendarRepository: CalendarRepository
   ) {}
+
+  async getCalendar(
+    headers: string,
+    userId: number
+  ): Promise<{ calendar: {}, otherCalendars: {}}> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    const result = { calendar: {}, otherCalendars: {} };
+    result.calendar = await this.calendarRepository.find({ userId });
+    result.otherCalendars = await OtherCalendar.find({ userId });
+    return result;
+  }
 
   async createCalendar(
     createCalendarDto: CreateCalendarDto,

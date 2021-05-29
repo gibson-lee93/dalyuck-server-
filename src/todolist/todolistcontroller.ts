@@ -9,7 +9,10 @@ import { Controller,
     Headers,
     HttpStatus,
     HttpCode,
-    Put
+    Put,
+    Param,
+    ParseIntPipe,
+    Query
  } from '@nestjs/common';
 
 import { Response } from 'express';
@@ -21,11 +24,13 @@ export class TodoListController {
 constructor(private readonly todolistService: TodoListService) {}
 
 // 등록되어있는 유저의 TodoList를 확인한다.
-@Get()
-async userTodoList(){
-console.log("userTodoList active");
-return this.todolistService.postTodoList();
-}
+  @Get('/:id')
+  async getTodoList(
+    @Headers('authorization') headers: string,
+    @Param('id', ParseIntPipe) userId: number
+  ): Promise<TodoList[]> {
+    return this.todolistService.getTodoList(headers, userId);
+  }
 
 
 // TodoList를 등록한다.
@@ -49,7 +54,7 @@ toDoListName : string
     completeBody.toDoListName
   );
 
-  
+
 
   return {
     "TodoList" : userTodoList
@@ -109,13 +114,13 @@ async userTodoListDelete(
     );
 
     if(userTodoList.error){
-  
+
       res.status(userTodoList.error);
       res.send({
         "statusCode" : userTodoList.error,
         "message" : userTodoList.message
       })
-  
+
     }
 
     else if(!userTodoList.error){
@@ -133,4 +138,3 @@ async userTodoListDelete(
 
 
 }
-

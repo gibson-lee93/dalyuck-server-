@@ -21,7 +21,7 @@ id: number;
 @Column({ default: 'rgb(121, 134, 203)' })
 colour: string;
 
-@Column({ default: 'default todolist' })
+@Column()
 toDoListName: string;
 
 @Column()
