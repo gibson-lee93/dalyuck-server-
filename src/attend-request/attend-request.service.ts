@@ -6,6 +6,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { SendAttendRequestDto } from './dto/send-attend-request.dto';
 import { User } from '../user/user.entity';
 import { Event } from '../event/event.entity';
+import { ConfirmAttendRequestDto } from './dto/confirm-attend-request.dto';
 
 @Injectable()
 export class AttendRequestService {
@@ -58,5 +59,31 @@ export class AttendRequestService {
     }
 
     this.attendRequestRepository.sendAttendRequest(requesterEmail, requesteeEmail, eventId);
+  }
+
+  async confirmAttendRequest(
+    headers: string,
+    userId: number,
+    confirmAttendRequestDto: ConfirmAttendRequestDto
+  ): Promise<void> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    const { eventId, requestId } = confirmAttendRequestDto;
+
+    try{
+      await this.attendRequestRepository.query(
+        `INSERT INTO user_event(eventId, userId)
+        VALUES (${eventId}, ${userId})`
+      );
+      await this.attendRequestRepository.delete({ id: requestId });
+    } catch(err) {
+      console.log(err);
+      throw new InternalServerErrorException('Server error occurred');
+    }
   }
 }
