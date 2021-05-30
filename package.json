@@ -30,6 +30,7 @@
     "dotenv": "^8.6.0",
     "handlebars": "^4.7.7",
     "jsonwebtoken": "^8.5.1",
+    "luxon": "^1.27.0",
     "mysql2": "^2.2.5",
     "nodemailer": "^6.6.1",
     "pg": "^8.6.0",
