@@ -15,6 +15,7 @@ import { RequestEmailModule } from './request-email/request-email.module';
 import { OtherCalendarModule } from './other-calendar/other-calendar.module';
 import { OtherEventModule } from './other-event/other-event.module';
 import { AttendRequestModule } from './attend-request/attend-request.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { AttendRequestModule } from './attend-request/attend-request.module';
     RequestEmailModule,
     OtherCalendarModule,
     OtherEventModule,
-    AttendRequestModule
+    AttendRequestModule,
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [AppService],
