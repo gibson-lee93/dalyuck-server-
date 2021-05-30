@@ -131,10 +131,21 @@ export class UserService {
 
 
   async logIn(email: string, password: string): Promise<User> {
-    const user = await this.userRepository.findOne({
-      email: email,
-      password: password
-    });
+    let user:User 
+    
+    if(password === "OAuthUser_Google"){
+      user = await this.userRepository.findOne({
+        email: email
+      });
+    }
+
+    else{
+      user = await this.userRepository.findOne({
+        email: email,
+        password: password
+      });
+    }
+    
 
     if(!user) {
       throw new NotFoundException('email or password not found');
@@ -288,5 +299,6 @@ export class UserService {
       throw new HttpException("Server error occurred", 500);
     }
   }
+
 
 }

@@ -173,25 +173,48 @@ export class UserController {
       .then(async (data) => { // 검증완료 : True
         console.log("google OAuth confirm : ", data);
 
-        const userData = await this.userService.insertUser(
-          completeBody.userName,
-          "OAuthUser_Google",
-          completeBody.email
-        )
+        const found = await User.findOne({email : completeBody.email});
+
+          // DB에 Email이 존재하지 않음
+          if(!found) {
+            // 회원가입절차.
+            const userData = await this.userService.insertUser(
+              completeBody.userName,
+              "OAuthUser_Google",
+              completeBody.email
+            )
+    
+            // Client에 줄 Token 셋팅
+            res.set('Authorization', 'Bearer ' + userData.token);
+            // 정상처리로 statusCode는 200
+            res.status(200);
+            // 회원가입한 후이기 때문에 모든 정보를 Client쪽으로 전달
+            res.send({
+              userId : userData.id,
+              userName : userData.userName,
+              email : userData.email,
+              calender:[],
+              toDoList:[],
+              message : "userinfo updated"
+            });
+          }
+      
+          else{
+            // 로그인 절차
+            const user = await this.userService.logIn(completeBody.email, "OAuthUser_Google");
+            res.set('Authorization', 'Bearer ' + user.token);
+            delete user.token;
+            res.send({
+              "userId" : user.id,
+              "userName" : user.userName,
+              "email" : user.email,
+              "calendar" : user.calendar,
+              "toDoList" : user.todolist
+            });
+          }
+
+
         
-        // Client에 줄 Token 셋팅
-        res.set('Authorization', 'Bearer ' + userData.token);
-        // 정상처리로 statusCode는 200
-        res.status(200);
-        // 회원가입한 후이기 때문에 모든 정보를 Client쪽으로 전달
-        res.send({
-          userId : userData.id,
-          userName : userData.userName,
-          email : userData.email,
-          calender:[],
-          toDoList:[],
-          message : "userinfo updated"
-        });
       })
       .catch(err => { // 검증완료 : False
         // const errorMessage = err.split(",")[0];
@@ -210,7 +233,8 @@ export class UserController {
         else{
           res.status(500);
           res.send({
-            message: "Server error occurred"
+            message: "Server error occurred",
+            systemMessage : String(err)
           });
         }
         
