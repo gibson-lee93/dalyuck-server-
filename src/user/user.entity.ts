@@ -3,12 +3,13 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany
+  OneToMany,
+  ManyToMany
 } from 'typeorm';
-
 import { Calendar } from "../calendar/calendar.entity";
 import { TodoList } from "../todolist/todolist.entity";
 import { OtherCalendar } from '../other-calendar/other-calendar.entity';
+import { Event } from '../event/event.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -48,4 +49,8 @@ export class User extends BaseEntity {
   })
   otherCalendars: OtherCalendar[];
 
+  @ManyToMany(type => Event, events => events.users, {
+    eager: true
+  })
+  attendEvents: Event[];
 }

@@ -1,6 +1,6 @@
 import { Calendar } from '../calendar/calendar.entity'
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
+import { User } from '../user/user.entity';
 @Entity()
 export class Event extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -38,4 +38,12 @@ export class Event extends BaseEntity {
 
   @Column()
   calendarId: number;
+
+  @ManyToMany(type => User, user => user.attendEvents, {
+    cascade: true
+  })
+  @JoinTable({
+    name: 'user_event'
+  })
+  users: User[];
 }
