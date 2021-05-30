@@ -16,6 +16,18 @@ export class AttendRequestService {
     private mailerService: MailerService
   ) {}
 
+  async getAttendEvent(headers: string, userId: number): Promise<Event[]> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    const user = await User.findOne({ id: userId });
+    return user.attendEvents;
+  }
+
   async sendAttendRequest(
     headers: string,
     userId: number,
