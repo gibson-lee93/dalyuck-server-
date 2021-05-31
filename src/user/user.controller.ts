@@ -67,7 +67,7 @@ export class UserController {
             calender:[],
             toDoList:[],
             message : "userinfo updated"
-            
+
         })
 
 
@@ -83,13 +83,7 @@ export class UserController {
     const user = await this.userService.logIn(email, password);
     res.set('Authorization', 'Bearer ' + user.token);
     delete user.token;
-    res.send({
-      "userId" : user.id,
-      "userName" : user.userName,
-      "email" : user.email,
-      "calendar" : user.calendar,
-      "toDoList" : user.todolist
-    });
+    res.send({ user });
   }
 
   // 회원의 정보를 수정한다.
@@ -183,7 +177,7 @@ export class UserController {
               "OAuthUser_Google",
               completeBody.email
             )
-    
+
             // Client에 줄 Token 셋팅
             res.set('Authorization', 'Bearer ' + userData.token);
             // 정상처리로 statusCode는 200
@@ -198,7 +192,7 @@ export class UserController {
               message : "userinfo updated"
             });
           }
-      
+
           else{
             // 로그인 절차
             const user = await this.userService.logIn(completeBody.email, "OAuthUser_Google");
@@ -214,7 +208,7 @@ export class UserController {
           }
 
 
-        
+
       })
       .catch(err => { // 검증완료 : False
         // const errorMessage = err.split(",")[0];
@@ -237,7 +231,7 @@ export class UserController {
             systemMessage : String(err)
           });
         }
-        
+
       })
 
         // const userData = await this.userService.insertUser(
@@ -257,7 +251,7 @@ export class UserController {
         //     calender:[],
         //     toDoList:[],
         //     message : "userinfo updated"
-            
+
         // })
 
 
