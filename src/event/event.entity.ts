@@ -1,6 +1,17 @@
 import { Calendar } from '../calendar/calendar.entity'
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+  OneToMany
+ } from 'typeorm';
 import { User } from '../user/user.entity';
+import { Notification } from '../notification/notification.entity';
+
 @Entity()
 export class Event extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -46,4 +57,10 @@ export class Event extends BaseEntity {
     name: 'user_event'
   })
   users: User[];
+
+  @OneToMany(type => Notification, notification => notification.event, {
+    eager: true,
+    cascade: true
+   })
+  notifications: Notification[];
 }
