@@ -79,7 +79,7 @@ export class EventService {
     const result = await this.eventRepository.delete({ id: eventId });
 
     if(result.affected === 0) {
-      throw new NotFoundException(`Event with ID "${eventId}" not found`)
+      throw new NotFoundException(`Event with ID "${eventId}" not found`);
     }
   }
 }
