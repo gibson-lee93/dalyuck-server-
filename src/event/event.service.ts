@@ -25,13 +25,7 @@ export class EventService {
       throw new UnauthorizedException(checkHeaderToken.message);
     }
 
-    const result = await this.eventRepository.find({ calendarId });
-
-    if(result.length === 0) {
-      throw new NotFoundException(`Event not found`);
-    }
-
-    return result;
+    return await this.eventRepository.find({ calendarId });
   }
 
   async createEvent(

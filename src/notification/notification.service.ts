@@ -12,6 +12,7 @@ import { DateTime } from 'luxon';
 import { User } from '../user/user.entity';
 import { Event } from '../event/event.entity';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
+import { Notification } from './notification.entity';
 
 @Injectable()
 export class NotificationService {
@@ -20,6 +21,21 @@ export class NotificationService {
     private notificationRepository: NotificationRepository,
     private mailerService: MailerService
   ) {}
+
+  async getNotification(
+    headers: string,
+    userId: number,
+    eventId: number
+  ): Promise<Notification[]> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    return await this.notificationRepository.find({ eventId });
+  }
 
   async createNotification(
     headers: string,
