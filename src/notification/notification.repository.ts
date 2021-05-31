@@ -8,13 +8,13 @@ export class NotificationRepository extends Repository<Notification> {
   async createNotification(
     eventId: number,
     alarm: string
-  ): Promise<void> {
+  ): Promise<Notification> {
     const notification = new Notification();
     notification.eventId = eventId;
     notification.alarm = alarm;
 
     try{
-      await notification.save();
+      return await notification.save();
     } catch(err) {
       console.log(err);
       throw new InternalServerErrorException('Server error occurred');
