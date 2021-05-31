@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable,
+  UnauthorizedException,
+  InternalServerErrorException,
+  NotFoundException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationRepository } from './notification.repository';
 import { CreateNotificationDto } from './dto/create-notification.dto';
@@ -98,5 +102,23 @@ export class NotificationService {
         });
       })
     });
+  }
+
+  async deleteNotification(
+    headers: string,
+    userId: number,
+    notificationId: number
+  ): Promise<void> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    const result = await this.notificationRepository.delete({ id: notificationId });
+    if(result.affected === 0) {
+      throw new NotFoundException(`Notification with ID "${notificationId}" not found`);
+    }
   }
 }
