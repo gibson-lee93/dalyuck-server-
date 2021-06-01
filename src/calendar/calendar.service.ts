@@ -7,6 +7,7 @@ import { UpdateCalendarDto } from './dto/update-calendar.dto';
 import { checkToken } from '../function/token/createToken';
 import { OtherCalendar } from '../other-calendar/other-calendar.entity';
 import { searchCalendar, searchOtherCalendar, searchAttendEvent } from '../function/query/queryFunctions';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class CalendarService {
@@ -19,7 +20,7 @@ export class CalendarService {
     headers: string,
     userId: number,
     keyword: string
-  ): Promise<{ event:[], otherEvent:[], eventAttend:[], message:string }> {
+  ): Promise<{ event:[], message:string }> {
     const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
@@ -29,12 +30,14 @@ export class CalendarService {
 
     const event = await this.calendarRepository.query(searchCalendar(userId, keyword));
     const otherEvent = await this.calendarRepository.query(searchOtherCalendar(userId, keyword));
-    const eventAttend = await this.calendarRepository.query(searchAttendEvent(userId, keyword));
+    const attendEvent = await this.calendarRepository.query(searchAttendEvent(userId, keyword));
+    event.push(...otherEvent, ...attendEvent);
+    event.sort((a: DateTime, b: DateTime) => {
+      return DateTime.fromISO(a.startTime) - DateTime.fromISO(b.startTime);
+    })
 
     return {
       event,
-      otherEvent,
-      eventAttend,
       message: `Search result with keyword: ${keyword}`
     };
   }

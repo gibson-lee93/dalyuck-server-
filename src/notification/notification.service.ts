@@ -53,7 +53,7 @@ export class NotificationService {
     const notification = await this.notificationRepository.createNotification(eventId, alarm);
 
     const now = DateTime.now();
-    const diff = now.diff(DateTime.fromSQL(alarm)).as('milliseconds') * -1;
+    const diff = now.diff(DateTime.fromISO(alarm)).as('milliseconds') * -1;
     if(diff < 1) {
       return;
     }
