@@ -8,6 +8,15 @@ import { Calendar } from './calendar.entity';
 export class CalendarController {
   constructor(private calendarService: CalendarService) {}
 
+  @Post('/search')
+  searchCalendar(
+    @Headers('authorization') headers: string,
+    @Body('userId') userId: number,
+    @Body('keyword') keyword: string
+  ): Promise<{ event:[], otherEvent:[], eventAttend:[], message:string }> {
+    return this.calendarService.searchCalendar(headers, userId, keyword);
+  }
+
   @Get('/:id')
   getCalendar(
     @Headers('authorization') headers: string,

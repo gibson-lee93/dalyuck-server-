@@ -13,7 +13,7 @@ export const insertIntoOtherCalendar = (userId: number, calendarId: number):stri
   )`
 };
 
-export const insertIntoOtherEvent = (colour: string, otherCalendarId: number, calendarId: number):string => {
+export const insertIntoOtherEvent = (colour: string, otherCalendarId: number, calendarId: number): string => {
   return `INSERT INTO other_event(
     startTime, endTime, eventName, description, access, location, colour, otherCalendarId
   )
@@ -22,7 +22,7 @@ export const insertIntoOtherEvent = (colour: string, otherCalendarId: number, ca
   WHERE event.calendarId = ${calendarId}`
 };
 
-export const addTriggerAfterInsertEvent = (userId: number, otherCalendarId: number, calendarId: number, colour: string):string => {
+export const addTriggerAfterInsertEvent = (userId: number, otherCalendarId: number, calendarId: number, colour: string): string => {
   return `CREATE TRIGGER after_event_insert_${userId}_${otherCalendarId}
   AFTER INSERT
   ON event FOR EACH ROW
@@ -34,7 +34,7 @@ export const addTriggerAfterInsertEvent = (userId: number, otherCalendarId: numb
   END`
 };
 
-export const addTriggerAfterUpdateEvent = (userId: number, otherCalendarId: number, calendarId: number):string => {
+export const addTriggerAfterUpdateEvent = (userId: number, otherCalendarId: number, calendarId: number): string => {
   return `CREATE TRIGGER after_event_update_${userId}_${otherCalendarId}
   AFTER UPDATE
   ON event FOR EACH ROW
@@ -47,7 +47,7 @@ export const addTriggerAfterUpdateEvent = (userId: number, otherCalendarId: numb
   END`
 };
 
-export const addTriggerAfterDeleteEvent = (userId: number, otherCalendarId: number, calendarId: number):string => {
+export const addTriggerAfterDeleteEvent = (userId: number, otherCalendarId: number, calendarId: number): string => {
   return `CREATE TRIGGER after_event_delete_${userId}_${otherCalendarId}
   AFTER DELETE
   ON event FOR EACH ROW
@@ -58,7 +58,7 @@ export const addTriggerAfterDeleteEvent = (userId: number, otherCalendarId: numb
   END`
 };
 
-export const addTriggerAfterUpdateOtherCalendar = (userId: number, otherCalendarId: number):string => {
+export const addTriggerAfterUpdateOtherCalendar = (userId: number, otherCalendarId: number): string => {
   return `CREATE TRIGGER after_other_calendar_update_${userId}_${otherCalendarId}
   AFTER UPDATE
   ON other_calendar FOR EACH ROW
@@ -70,3 +70,27 @@ export const addTriggerAfterUpdateOtherCalendar = (userId: number, otherCalendar
     END IF;
   END`
 };
+
+export const searchCalendar = (userId: number, keyword: string): string => {
+  return `select e.*
+  FROM event e
+  JOIN calendar c
+  ON c.id = e.calendarId AND c.userId  = ${userId}
+  WHERE e.eventName LIKE '%${keyword}%' OR e.description LIKE '%${keyword}%'`
+}
+
+export const searchOtherCalendar = (userId: number, keyword: string): string => {
+  return `select oe.*
+  FROM other_event oe
+  JOIN other_calendar oc
+  ON oc.id = oe.otherCalendarId AND oc.userId  = ${userId}
+  WHERE oe.eventName LIKE '%${keyword}%' OR oe.description LIKE '%${keyword}%'`
+}
+
+export const searchAttendEvent = (userId: number, keyword: string): string => {
+  return `select e.*
+  FROM event e
+  JOIN user_event ue
+  ON ue.eventId = e.id AND ue.userId  = ${userId}
+  WHERE e.eventName LIKE '%${keyword}%' OR e.description LIKE '%${keyword}%'`
+}

@@ -6,6 +6,7 @@ import { CreateCalendarDto } from './dto/create-calendar.dto';
 import { UpdateCalendarDto } from './dto/update-calendar.dto';
 import { checkToken } from '../function/token/createToken';
 import { OtherCalendar } from '../other-calendar/other-calendar.entity';
+import { searchCalendar, searchOtherCalendar, searchAttendEvent } from '../function/query/queryFunctions';
 
 @Injectable()
 export class CalendarService {
@@ -13,6 +14,30 @@ export class CalendarService {
     @InjectRepository(CalendarRepository)
     private calendarRepository: CalendarRepository
   ) {}
+
+  async searchCalendar(
+    headers: string,
+    userId: number,
+    keyword: string
+  ): Promise<{ event:[], otherEvent:[], eventAttend:[], message:string }> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    const event = await this.calendarRepository.query(searchCalendar(userId, keyword));
+    const otherEvent = await this.calendarRepository.query(searchOtherCalendar(userId, keyword));
+    const eventAttend = await this.calendarRepository.query(searchAttendEvent(userId, keyword));
+
+    return {
+      event,
+      otherEvent,
+      eventAttend,
+      message: `Search result with keyword: ${keyword}`
+    };
+  }
 
   async getCalendar(
     headers: string,
