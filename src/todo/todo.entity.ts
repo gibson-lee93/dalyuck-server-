@@ -27,6 +27,9 @@ description : string;
 @Column({ nullable : false })
 todolistId : number;
 
+@Column({ default : false })
+isFinish : boolean;
+
 @ManyToOne(type => TodoList, todolist => todolist.todo, {
 eager: false,
 onDelete: 'CASCADE'

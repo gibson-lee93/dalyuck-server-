@@ -46,13 +46,15 @@ export class TodoRepository extends Repository<Todo> {
     todoId: number,
     startTime : string,
     toDoName : string,
-    description : string
+    description : string,
+    isFinish : boolean
   ){
 
     const todo = await this.findOne({ id: todoId});
     todo.startTime = startTime;
     todo.toDoName = toDoName.length !== 0 ? toDoName : todo.toDoName;
     todo.description = description.length !== 0 ? description : todo.description;
+    todo.isFinish = isFinish;
 
     try{
       await todo.save();
