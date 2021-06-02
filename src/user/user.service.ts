@@ -6,7 +6,8 @@ import { User } from "./user.entity";
 import { UserRepository } from './user.repository';
 import { TodoList } from '../todolist/todolist.entity';
 import { Calendar } from '../calendar/calendar.entity';
-
+import { insertHolidayCalendar, insertHolidayEvent } from '../function/query/queryFunctions';
+import { OtherCalendar } from '../other-calendar/other-calendar.entity';
 
 @Injectable()
 export class UserService {
@@ -102,6 +103,9 @@ export class UserService {
         calendar.calendarName = `${user.userName}`;
         await calendar.save();
 
+        await this.userRepository.query(insertHolidayCalendar(userId));
+        const otherCalendar = await OtherCalendar.findOne({ userId });
+        await this.userRepository.query(insertHolidayEvent(otherCalendar.id));
 
         const todoList = new TodoList();
         todoList.toDoListName = 'Tasks';

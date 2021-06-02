@@ -94,3 +94,17 @@ export const searchAttendEvent = (userId: number, keyword: string): string => {
   ON ue.eventId = e.id AND ue.userId  = ${userId}
   WHERE e.eventName LIKE '%${keyword}%' OR e.description LIKE '%${keyword}%'`
 }
+
+export const insertHolidayCalendar = (userId: number): string => {
+  return `INSERT INTO other_calendar (calendarName, description, colour, userId)
+  SELECT calendarName, description, colour, ${userId}
+  FROM other_calendar
+  WHERE id=1;`
+}
+
+export const insertHolidayEvent = (otherCalendarId: number): string => {
+  return `INSERT INTO other_event (eventName, description, colour, location, startTime, endTime, otherCalendarId)
+  SELECT eventName, description, colour, location, startTime, endTime, ${otherCalendarId}
+  FROM other_event
+  WHERE otherCalendarId=1;`
+}
