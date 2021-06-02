@@ -3,7 +3,7 @@ import { EntityRepository, Repository} from 'typeorm';
 // import { CreateTodoListDto } from './dto/create-todolist.dto';
 // import { checkToken } from '../function/token/createToken';
 // import { CreateUserDto } from './dto/create-user.dto';
-import { InternalServerErrorException } from '@nestjs/common';
+import { InternalServerErrorException, ForbiddenException } from '@nestjs/common';
 
 @EntityRepository(Todo)
 export class TodoRepository extends Repository<Todo> {
@@ -54,6 +54,11 @@ export class TodoRepository extends Repository<Todo> {
   ){
 
     const todo = await this.findOne({ id: todoId});
+
+    if(!todo){
+      throw new ForbiddenException({ message : `can not find todoId ${todoId}`});
+    }
+
     todo.startTime = startTime;
     todo.toDoName = toDoName.length !== 0 ? toDoName : todo.toDoName;
     todo.description = description.length !== 0 ? description : todo.description;
@@ -77,6 +82,10 @@ export class TodoRepository extends Repository<Todo> {
   async deleteTodo(
     todoId : number
   ){
+
+    if(!todoId){
+      throw new ForbiddenException({ message : `can not find todoId ${todoId}`});
+    }
 
     try{
       console.log("1. repository(deleteTodoList) : Start");
