@@ -80,7 +80,8 @@ export class TodoController {
       startTime : string,
       toDoName : string,
       description : string,
-      todoId : number
+      toDoId : number,
+      isFinish: boolean
     }
 
   ) {
@@ -90,10 +91,11 @@ export class TodoController {
       const userTodo = await this.todoService.updateTodo(
         headers,
         completeBody.userId,
-        completeBody.todoId,
+        completeBody.toDoId,
         completeBody.startTime,
         completeBody.toDoName,
-        completeBody.description
+        completeBody.description,
+        completeBody.isFinish
       );
 
 
