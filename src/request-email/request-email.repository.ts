@@ -22,7 +22,7 @@ export class RequestEmailRepository extends Repository<RequestEmail> {
     calendarId: number,
     requesterEmail: string,
     requesteeEmail: string
-  ): Promise<void> {
+  ): Promise<RequestEmail> {
     const requestEmail = await this.findOne({ requesteeEmail, requesterEmail });
 
     if(!requestEmail) {
@@ -32,7 +32,7 @@ export class RequestEmailRepository extends Repository<RequestEmail> {
     requestEmail.calendarId = calendarId;
 
     try{
-      await requestEmail.save();
+      return await requestEmail.save();
     } catch(err) {
       console.log(err);
       throw new InternalServerErrorException('Server error occurred');
