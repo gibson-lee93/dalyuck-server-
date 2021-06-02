@@ -5,6 +5,7 @@ import {createToken, checkToken} from '../function/token/createToken';
 import { User } from "./user.entity";
 import { UserRepository } from './user.repository';
 import { TodoList } from '../todolist/todolist.entity';
+import { Calendar } from '../calendar/calendar.entity';
 
 
 @Injectable()
@@ -96,6 +97,12 @@ export class UserService {
         console.log("4- user save pass");
         const userId = user.id;
 
+        const calendar = new Calendar();
+        calendar.userId = user.id;
+        calendar.calendarName = `${user.userName}`;
+        await calendar.save();
+
+
         const todoList = new TodoList();
         todoList.toDoListName = 'Tasks';
         todoList.userId = user.id;
@@ -131,8 +138,8 @@ export class UserService {
 
 
   async logIn(email: string, password: string): Promise<User> {
-    let user:User 
-    
+    let user:User
+
     if(password === "OAuthUser_Google"){
       user = await this.userRepository.findOne({
         email: email
@@ -145,7 +152,7 @@ export class UserService {
         password: password
       });
     }
-    
+
 
     if(!user) {
       throw new NotFoundException('email or password not found');

@@ -27,10 +27,10 @@ export class AttendRequestController {
 
   @Patch('/attend')
   confirmAttendRequest(
-    @Headers('authorization') headers: string,
+    // @Headers('authorization') headers: string,
     @Body('userId') userId: number,
     @Body() confirmAttendRequestDto: ConfirmAttendRequestDto
   ): Promise<void> {
-    return this.attendRequestService.confirmAttendRequest(headers, userId, confirmAttendRequestDto);
+    return this.attendRequestService.confirmAttendRequest(userId, confirmAttendRequestDto);
   }
 }

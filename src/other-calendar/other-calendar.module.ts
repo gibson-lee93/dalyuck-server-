@@ -9,6 +9,7 @@ import { OtherCalendarRepository } from './other-calendar.repository';
     TypeOrmModule.forFeature([OtherCalendarRepository])
   ],
   providers: [OtherCalendarService],
-  controllers: [OtherCalendarController]
+  controllers: [OtherCalendarController],
+  exports: [OtherCalendarService]
 })
 export class OtherCalendarModule {}

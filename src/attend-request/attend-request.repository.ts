@@ -9,14 +9,14 @@ export class AttendRequestRepository extends Repository<AttendRequest> {
     requesterEmail: string,
     requesteeEmail: string,
     eventId: number
-  ): Promise<void> {
+  ): Promise<AttendRequest> {
     const attendRequest = new AttendRequest();
     attendRequest.requesterEmail = requesterEmail;
     attendRequest.requesteeEmail = requesteeEmail;
     attendRequest.eventId = eventId;
 
     try{
-      await attendRequest.save();
+      return await attendRequest.save();
     } catch(err) {
       console.log(err);
       throw new InternalServerErrorException('Server error occurred');
