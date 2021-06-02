@@ -30,6 +30,9 @@ description : string;
 @Column({ nullable : false })
 todolistId : number;
 
+@Column({ nullable : true })
+endTime : string;
+
 @Column({ default : false })
 isFinish : boolean;
 

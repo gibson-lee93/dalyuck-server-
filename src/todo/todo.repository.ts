@@ -13,7 +13,8 @@ export class TodoRepository extends Repository<Todo> {
     startTime : string,
     toDoName : string,
     description : string,
-    todoListId : number
+    todoListId : number,
+    endTime : string
   ){
 
     const todo = new Todo();
@@ -21,6 +22,7 @@ export class TodoRepository extends Repository<Todo> {
     todo.startTime = startTime;
     todo.toDoName = toDoName;
     todo.todolistId = todoListId;
+    todo.endTime = endTime;
     
 
     if(description.length > 0){
@@ -47,7 +49,8 @@ export class TodoRepository extends Repository<Todo> {
     startTime : string,
     toDoName : string,
     description : string,
-    isFinish : boolean
+    isFinish : boolean,
+    endTime : string
   ){
 
     const todo = await this.findOne({ id: todoId});
@@ -55,6 +58,7 @@ export class TodoRepository extends Repository<Todo> {
     todo.toDoName = toDoName.length !== 0 ? toDoName : todo.toDoName;
     todo.description = description.length !== 0 ? description : todo.description;
     todo.isFinish = isFinish;
+    todo.endTime = endTime.length !== 0 ? endTime : todo.endTime;
 
     try{
       await todo.save();
