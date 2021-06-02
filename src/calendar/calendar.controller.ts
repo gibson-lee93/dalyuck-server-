@@ -13,7 +13,7 @@ export class CalendarController {
     @Headers('authorization') headers: string,
     @Body('userId') userId: number,
     @Body('keyword') keyword: string
-  ): Promise<{ event:[], otherEvent:[], eventAttend:[], message:string }> {
+  ): Promise<{ event:[], message:string }> {
     return this.calendarService.searchCalendar(headers, userId, keyword);
   }
 
