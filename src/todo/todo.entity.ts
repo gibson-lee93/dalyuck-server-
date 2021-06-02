@@ -18,6 +18,9 @@ id: number;
 @Column()
 startTime: string;
 
+@Column({ default: 'rgb(121, 134, 203)' })
+colour: string;
+
 @Column({ nullable : false })
 toDoName: string;
 
