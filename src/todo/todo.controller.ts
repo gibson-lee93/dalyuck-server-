@@ -35,17 +35,18 @@ export class TodoController {
 
 
   // Todo를 등록한다.
-  @Post('signup')
+  @Post()
   async userTodoListSignup(
     // Client의 Body에서 온 정보를 각각 변수로
     // 저장
     @Headers() headers,
     @Body() completeBody: {
       userId : number,
-      startTime : string,
+      toDoListId : number,
       toDoName : string,
+      startTime : string,
       description : string,
-      todoListId : number
+      
     }
 
   ) {
@@ -53,7 +54,7 @@ export class TodoController {
         const userTodo = await this.todoService.insertTodo(
           headers,
           completeBody.userId,
-          completeBody.todoListId,
+          completeBody.toDoListId,
           completeBody.startTime,
           completeBody.toDoName,
           completeBody.description,

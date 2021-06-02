@@ -18,7 +18,7 @@ export class TodoList extends BaseEntity {
 @PrimaryGeneratedColumn()
 id: number;
 
-@Column({ default: 'rgb(121, 134, 203)' })
+@Column({ default: '#9E69AF' })
 colour: string;
 
 @Column()
