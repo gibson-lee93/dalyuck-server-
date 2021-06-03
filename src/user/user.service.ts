@@ -56,7 +56,7 @@ export class UserService {
     userName : string,
     password : string,
     email : string,
-  ) : Promise <User>{
+  ) : Promise <any>{
       // email유효성 검사 코딩 필요(DB구축후) : for루프는 임시!
       // user.find
       // for(let i : number = 0; i < this.userDB.length; i++){
@@ -89,30 +89,29 @@ export class UserService {
       console.log("3- user register pass");
       console.log("user", user);
 
-
-
+      await user.save();
+      const todoList = new TodoList();
+      const calendar = new Calendar();
       try{
-        // userDB의 원소갯수를 이용하여 userId(PK ID)를 생성(DB구축시 삭제)
-        await user.save();
+        
 
-        console.log("4- user save pass");
-        const userId = user.id;
+        console.log("4- user save pass :  ", user.id);
+        const userId : number = user.id;
 
-        const calendar = new Calendar();
+        
         calendar.userId = user.id;
         calendar.calendarName = `${user.userName}`;
         await calendar.save();
 
         await this.userRepository.query(insertHolidayCalendar(userId));
         const otherCalendar = await OtherCalendar.findOne({ userId });
+        console.log("4-1- user save pass :  ", user.id);
         await this.userRepository.query(insertHolidayEvent(otherCalendar.id));
-
-        const todoList = new TodoList();
+        
         todoList.toDoListName = 'Tasks';
         todoList.userId = user.id;
         await todoList.save();
-
-        //토큰 만들기 위한 준비작업(payload 생성)
+        console.log("todoList : ",todoList);
         const payload = {
           userId,
           email
@@ -120,12 +119,8 @@ export class UserService {
         //토큰 생성
         user.token = createToken(payload, user.salt, { expiresIn: "1h" });
         console.log("5- user save pass");
-        await user.save(); // 토큰 저장
+        await user.save(); 
 
-        // // newMember에 새로운 class을 생성후 Client에서 받은 원소들을 입력
-        // const newUser = new User(userId, email, userName, password, salt, token);
-        // // Array members에 newMember을 Push하여 배열을 삽입
-        // this.userDB.push(newUser);
         console.log("6- user save pass");
 
       }
@@ -134,10 +129,10 @@ export class UserService {
         console.log("Error : ", err);
         throw new HttpException("Server error occurred", 500);
       }
-
+      console.log(user);
       delete user.password;
       console.log("7- user save pass");
-      return user;
+      return {user,todoList, calendar};
   }
 
 
