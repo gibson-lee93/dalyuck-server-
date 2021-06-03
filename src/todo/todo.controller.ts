@@ -46,7 +46,7 @@ export class TodoController {
       toDoName : string,
       startTime : string,
       description : string,
-      
+      endTime : string
     }
 
   ) {
@@ -58,6 +58,7 @@ export class TodoController {
           completeBody.startTime,
           completeBody.toDoName,
           completeBody.description,
+          completeBody.endTime
 
         );
 
@@ -82,7 +83,8 @@ export class TodoController {
       toDoName : string,
       description : string,
       toDoId : number,
-      isFinish: boolean
+      isFinish: boolean,
+      endTime : string
     }
 
   ) {
@@ -96,7 +98,8 @@ export class TodoController {
         completeBody.startTime,
         completeBody.toDoName,
         completeBody.description,
-        completeBody.isFinish
+        completeBody.isFinish,
+        completeBody.endTime
       );
 
 

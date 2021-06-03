@@ -44,7 +44,8 @@ export class TodoService {
     todoListId : number,
     startTime : string,
     toDoName : string,
-    description : string
+    description : string,
+    endTime : string
   ) : Promise <any>{
     const token = headers.authorization.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
@@ -53,7 +54,7 @@ export class TodoService {
       throw new UnauthorizedException(checkHeaderToken.message);
     }
 
-    const result = this.todoRepository.createTodo(startTime, toDoName, description, todoListId);
+    const result = this.todoRepository.createTodo(startTime, toDoName, description, todoListId, endTime);
 
     return result;
   }
@@ -68,7 +69,8 @@ export class TodoService {
     startTime : string,
     toDoName : string,
     description : string,
-    isFinish : boolean
+    isFinish : boolean,
+    endTime : string
   ) : Promise <any>{
     const token = headers.authorization.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
@@ -77,7 +79,7 @@ export class TodoService {
       throw new UnauthorizedException(checkHeaderToken.message);
     }
 
-    const result = this.todoRepository.updateTodo(todoId, startTime, toDoName, description, isFinish);
+    const result = this.todoRepository.updateTodo(todoId, startTime, toDoName, description, isFinish, endTime);
 
     return result;
   }
