@@ -47,7 +47,7 @@ constructor(private readonly todolistService: TodoListService) {}
 
 
 // TodoList를 등록한다.
-@Post('signup')
+@Post()
 async userTodoListSignup(
 // Client의 Body에서 온 정보를 각각 변수로
 // 저장
@@ -68,9 +68,10 @@ toDoListName : string
   );
 
 
-
+  // return값은 TodoList 및 message를 응답한다.
   return {
-    "TodoList" : userTodoList
+    "TodoList" : userTodoList,
+    "message" : "TodoList Create"
   }
   // return userData;
 
