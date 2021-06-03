@@ -105,7 +105,15 @@ export class UserService {
 
         await this.userRepository.query(insertHolidayCalendar(userId));
         const otherCalendar = await OtherCalendar.findOne({ userId });
-        await this.userRepository.query(insertHolidayEvent(otherCalendar.id));
+        if(otherCalendar){ 
+          console.log()
+          await this.userRepository.query(insertHolidayEvent(otherCalendar.id)); // 에러구간
+          console.log("4-2- user save pass :  ", user.id);
+        }
+        // 에러 발생시 console.log로 출력
+        else{
+          console.log("otherCalendar : ", otherCalendar);
+        }
 
         const todoList = new TodoList();
         todoList.toDoListName = 'Tasks';
