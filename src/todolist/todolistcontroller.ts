@@ -12,7 +12,8 @@ import { Controller,
     Put,
     Param,
     ParseIntPipe,
-    Query
+    Query,
+    UnauthorizedException
  } from '@nestjs/common';
 
 import { Response } from 'express';
@@ -24,12 +25,24 @@ export class TodoListController {
 constructor(private readonly todolistService: TodoListService) {}
 
 // 등록되어있는 유저의 TodoList를 확인한다.
-  @Get('/:id')
+  @Get()
   async getTodoList(
     @Headers('authorization') headers: string,
-    @Param('id', ParseIntPipe) userId: number
+    @Query() query
   ): Promise<TodoList[]> {
-    return this.todolistService.getTodoList(headers, userId);
+    console.log("TodoList GET activated");
+
+    if(!query.userId){
+      // service에서 method inquireAllMember를 이용하여
+      // 모든 DB에 있는 member정보를 받는다.
+      console.log("empty")
+      throw new UnauthorizedException({
+        "message" : "Parameter userId is empty or wrong"
+      });
+    }
+    const result = this.todolistService.getTodoList(headers, query.userId);
+    console.log(result)
+    return result;
   }
 
 
