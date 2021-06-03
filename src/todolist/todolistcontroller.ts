@@ -77,7 +77,7 @@ toDoListName : string
 
 }
 
-// TodoList를 수정한다.
+// TodoList를 수정(update)한다.
 @Patch()
 async userTodoListUpdate(
 // Client의 Body에서 온 정보를 각각 변수로
@@ -101,7 +101,8 @@ toDoListName : string
   );
 
   return {
-    "TodoList" : userTodoList
+    "TodoList" : userTodoList,
+    "message" : "TodoList Update!"
   }
   // return userData;
 
