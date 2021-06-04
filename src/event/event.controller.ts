@@ -19,7 +19,7 @@ export class EventController {
   constructor(private eventService: EventService) {}
 
   @Get('/:id')
-  getCalendar(
+  getEvent(
     @Headers('authorization') headers: string,
     @Param('id', ParseIntPipe) userId: number,
     @Query('calendarId', ParseIntPipe) calendarId: number
@@ -29,28 +29,28 @@ export class EventController {
 
   @Post()
   createEvent(
-    @Body() createEventDto: CreateEventDto,
+    @Headers('authorization') headers: string,
     @Body('userId') userId: number,
-    @Headers('authorization') headers: string
+    @Body() createEventDto: CreateEventDto
   ): Promise<Event> {
-    return this.eventService.createEvent(createEventDto, userId, headers);
+    return this.eventService.createEvent(headers, userId, createEventDto);
   }
 
   @Patch()
   updateEvent(
-    @Body() updateEventDto: UpdateEventDto,
+    @Headers('authorization') headers: string,
     @Body('userId') userId: number,
-    @Headers('authorization') headers: string
+    @Body() updateEventDto: UpdateEventDto
   ): Promise<Event> {
-    return this.eventService.updateEvent(updateEventDto, userId, headers);
+    return this.eventService.updateEvent(headers, userId, updateEventDto);
   }
 
   @Delete()
   deleteEvent(
-    @Body('eventId') eventId: number,
+    @Headers('authorization') headers: string,
     @Body('userId') userId: number,
-    @Headers('authorization') headers: string
+    @Body('eventId') eventId: number
   ): Promise<void> {
-    return this.eventService.deleteEvent(eventId, userId, headers);
+    return this.eventService.deleteEvent(headers, userId, eventId);
   }
 }

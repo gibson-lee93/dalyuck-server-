@@ -29,9 +29,9 @@ export class EventService {
   }
 
   async createEvent(
-    createEventDto: CreateEventDto,
+    headers: string,
     userId: number,
-    headers: string
+    createEventDto: CreateEventDto
   ): Promise<Event> {
     const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
@@ -44,9 +44,9 @@ export class EventService {
   }
 
   async updateEvent(
-    updateEventDto: UpdateEventDto,
+    headers: string,
     userId: number,
-    headers: string
+    updateEventDto: UpdateEventDto
   ): Promise<Event> {
     const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
@@ -55,13 +55,13 @@ export class EventService {
       throw new UnauthorizedException(checkHeaderToken.message);
     }
 
-    return this.eventRepository.updateEvent(updateEventDto);
+    return this.eventRepository.updateEvent(userId, updateEventDto);
   }
 
   async deleteEvent(
-    eventId: number,
+    headers: string,
     userId: number,
-    headers: string
+    eventId: number
   ): Promise<void> {
     const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);

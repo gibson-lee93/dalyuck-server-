@@ -23,7 +23,7 @@ export class Event extends BaseEntity {
   @Column({ nullable: true })
   description: string;
 
-  @Column({ default: 'rgb(121, 134, 203)' })
+  @Column()
   colour: string;
 
   @Column({
