@@ -113,6 +113,7 @@ export class UserController {
 
   }
 
+  // 회원정보를 삭제한다.
   @Delete('info')
   async userDelete(
     @Body('userId') userId : number,
@@ -122,11 +123,10 @@ export class UserController {
     console.log("password" , password);
 
 
-    // return await this.userService.deleteUserInfo(userId,password,headers);
-
     const deleteUser = await this.userService.deleteUserInfo(userId,password,headers);
 
     console.log("deleteUser : ", deleteUser);
+
     if(deleteUser.error){
       throw new HttpException(deleteUser.message, deleteUser.error);
     }
@@ -135,6 +135,7 @@ export class UserController {
 
   }
 
+  // 로그아웃 한다.
   @Post('/logout')
   @HttpCode(200)
   logOut(
@@ -229,27 +230,5 @@ export class UserController {
         }
 
       })
-
-        // const userData = await this.userService.insertUser(
-        //   completeBody.userName,
-        //   completeBody.password,
-        //   completeBody.email
-        // );
-
-
-        // // express문법으로 response
-        // res.set('Authorization', 'Bearer ' + userData.token);
-        // res.send({
-
-        //     userId : userData.id,
-        //     userName : userData.userName,
-        //     email : userData.email,
-        //     calender:[],
-        //     toDoList:[],
-        //     message : "userinfo updated"
-
-        // })
-
-
   }
 }
