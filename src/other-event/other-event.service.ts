@@ -26,7 +26,7 @@ export class OtherEventService {
     const result = await this.otherEventRepository.find({ otherCalendarId });
 
     if(result.length === 0) {
-      throw new NotFoundException(`Other event not found`);
+      throw new NotFoundException(`Event for other calendar with id:${otherCalendarId} not found`);
     }
 
     return result;
