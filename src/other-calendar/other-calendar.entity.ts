@@ -1,13 +1,13 @@
 import { User } from '../user/user.entity';
 import { OtherEvent } from '../other-event/other-event.entity';
 import {
-        BaseEntity,
-        Entity,
-        PrimaryGeneratedColumn,
-        Column,
-        ManyToOne,
-        OneToMany
-      } from 'typeorm';
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany
+} from 'typeorm';
 
 @Entity()
 export class OtherCalendar extends BaseEntity {

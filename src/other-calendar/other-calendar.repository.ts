@@ -26,7 +26,6 @@ export class OtherCalendarRepository extends Repository<OtherCalendar> {
       await this.query(addTriggerAfterUpdateOtherCalendar(userId, otherCalendar.id));
 
       return await this.findOne({ id: copyCalendar.insertId });;
-
     } catch(err) {
       console.log(err);
       throw new InternalServerErrorException('Server error occurred');

@@ -25,8 +25,8 @@ export class OtherCalendarService {
       throw new UnauthorizedException(checkHeaderToken.message);
     }
 
-    const requestEmail = await RequestEmail.findOne({ id: requestEmailId});
-
+    const requestEmail = await RequestEmail.findOne({ id: requestEmailId });
+    
     try{
       const otherCalendar = await this.otherCalendarRepository.confirmSubscription(requestEmail.calendarId, userId);
       await RequestEmail.delete({ id: requestEmailId });
