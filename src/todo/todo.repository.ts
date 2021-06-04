@@ -24,11 +24,12 @@ export class TodoRepository extends Repository<Todo> {
     todo.todolistId = todoListId;
     todo.endTime = endTime;
     
-
+    // description의 문자열 길이가 0보다 크면 if문을 실행한다.(description에 내용이 있음)
     if(description.length > 0){
       todo.description = description;
     }
 
+    // todo를 DB에 저장후 Service로 return
     try{
       await todo.save();
       return todo;
@@ -54,7 +55,7 @@ export class TodoRepository extends Repository<Todo> {
   ){
 
     const todo = await this.findOne({ id: todoId});
-
+    // todo를 DB에서 찾지 못한경우 if문 수행
     if(!todo){
       throw new ForbiddenException({ message : `can not find todoId ${todoId}`});
     }
@@ -65,6 +66,7 @@ export class TodoRepository extends Repository<Todo> {
     todo.isFinish = isFinish;
     todo.endTime = endTime.length !== 0 ? endTime : todo.endTime;
 
+    // todo를 DB에 저장후 Service로 return
     try{
       await todo.save();
       return todo;
@@ -78,33 +80,32 @@ export class TodoRepository extends Repository<Todo> {
   }
 
 
-  // TodoList를 삭제한다.
+  // Todo를 삭제한다.
   async deleteTodo(
     todoId : number
   ){
-
+    // todo를 DB에서 찾지 못한경우 if문 수행
     if(!todoId){
       throw new ForbiddenException({ message : `can not find todoId ${todoId}`});
     }
 
     try{
-      console.log("1. repository(deleteTodoList) : Start");
+      console.log("1. repository(deleteTodo) : Start");
       const check = await this.findOne({id : todoId});
       console.log("check : ", check);
       if(!check){
-        return{ error: 401, message : "TodoList does not exist" };
+        return{ error: 401, message : "Todo does not exist" };
       }
 
       const result = await this.delete({id : todoId});
         if(result.affected === 0){
-          console.log("error1 repository(deleteTodoList) : 삭제가 제대로 안됨");
-          // throw new HttpException("User did not delete from the server", 500);
-          return {error : 500, message : "TodoList did not delete from the server"};
+          console.log("error1 repository(deleteTodo) : 삭제가 제대로 안됨");
+          return {error : 500, message : "Todo did not delete from the server"};
         }
-        // throw new HttpException("User deleted", 200);
-        console.log("2. repository(deleteTodoList) : 삭제가 제대로 됨");
-        return {status: 200, message : "TodoList deleted"};
-        // return "User deleted";
+
+        console.log("2. repository(deleteTodo) : 삭제가 제대로 됨");
+        return {status: 200, message : "Todo deleted"};
+
       }
 
     catch(error){

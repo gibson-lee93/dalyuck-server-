@@ -65,7 +65,8 @@ export class TodoController {
 
 
         return {
-          "Todo" : userTodo
+          "Todo" : userTodo,
+          "message" : "Post Todo success"
         }
 
   }
@@ -104,9 +105,10 @@ export class TodoController {
 
 
       return {
-        Todo : userTodo
+        Todo : userTodo,
+        "message" : "Patch Todo success"
       }
-      // return userData;
+
 
   }
 

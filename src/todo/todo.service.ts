@@ -24,6 +24,7 @@ export class TodoService {
     const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
+    // 토큰에 문제가 있을시 에러 응답을 보낸다.
     if(checkHeaderToken.error){
       throw new UnauthorizedException(checkHeaderToken.message);
     }
@@ -50,6 +51,7 @@ export class TodoService {
     const token = headers.authorization.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
+    // 토큰에 문제가 있을시 에러 응답을 보낸다.
     if(checkHeaderToken.error){
       throw new UnauthorizedException(checkHeaderToken.message);
     }
@@ -75,6 +77,7 @@ export class TodoService {
     const token = headers.authorization.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
+    // 토큰에 문제가 있을시 에러 응답을 보낸다.
     if(checkHeaderToken.error){
       throw new UnauthorizedException(checkHeaderToken.message);
     }
@@ -94,6 +97,7 @@ export class TodoService {
     const token = headers.authorization.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
+    // 토큰에 문제가 있을시 에러 응답을 보낸다.
     if(checkHeaderToken.error){
       throw new UnauthorizedException(checkHeaderToken.message);
     }
