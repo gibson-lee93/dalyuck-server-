@@ -20,7 +20,7 @@ export class CalendarService {
     headers: string,
     userId: number,
     keyword: string
-  ): Promise<{ event:[], message:string }> {
+  ): Promise<{ event:[], message: string }> {
     const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
@@ -45,7 +45,7 @@ export class CalendarService {
   async getCalendar(
     headers: string,
     userId: number
-  ): Promise<{ calendar: {}, otherCalendars: {}}> {
+  ): Promise<{ calendar: {}, otherCalendars: {} }> {
     const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
@@ -71,7 +71,7 @@ export class CalendarService {
       throw new UnauthorizedException(checkHeaderToken.message);
     }
 
-    return this.calendarRepository.createCalendar(createCalendarDto, userId);
+    return this.calendarRepository.createCalendar(userId, createCalendarDto );
   }
 
   async updateCalendar(
@@ -107,5 +107,4 @@ export class CalendarService {
       throw new NotFoundException(`Calendar with ID "${calendarId}" not found`);
     }
   }
-
 }

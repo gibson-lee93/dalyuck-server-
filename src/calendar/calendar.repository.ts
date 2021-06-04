@@ -8,8 +8,8 @@ import { InternalServerErrorException } from '@nestjs/common';
 export class CalendarRepository extends Repository<Calendar> {
 
   async createCalendar(
-    createCalendarDto: CreateCalendarDto,
-    userId: number
+    userId: number,
+    createCalendarDto: CreateCalendarDto
   ): Promise<Calendar> {
     const { calendarName, description } = createCalendarDto;
 

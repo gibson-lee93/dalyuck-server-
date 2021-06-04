@@ -13,7 +13,7 @@ export class CalendarController {
     @Headers('authorization') headers: string,
     @Body('userId') userId: number,
     @Body('keyword') keyword: string
-  ): Promise<{ event:[], message:string }> {
+  ): Promise<{ event:[], message: string }> {
     return this.calendarService.searchCalendar(headers, userId, keyword);
   }
 
@@ -21,7 +21,7 @@ export class CalendarController {
   getCalendar(
     @Headers('authorization') headers: string,
     @Param('id', ParseIntPipe) userId: number,
-  ): Promise<{ calendar: {}, otherCalendars: {}}> {
+  ): Promise<{ calendar: {}, otherCalendars: {} }> {
     return this.calendarService.getCalendar(headers, userId);
   }
 
@@ -51,5 +51,4 @@ export class CalendarController {
   ): Promise<void> {
     return this.calendarService.deleteCalendar(headers, userId, calendarId);
   }
-
 }
