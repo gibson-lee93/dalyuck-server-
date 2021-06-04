@@ -21,6 +21,7 @@ export class TodoListService {
     const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
+    // token이상으로 에러 메세지 응답
     if(checkHeaderToken.error){
       throw new UnauthorizedException(checkHeaderToken.message);
     }
@@ -38,6 +39,7 @@ export class TodoListService {
     const token = headers.authorization.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
+    // token이상으로 에러 메세지 응답
     if(checkHeaderToken.error){
       throw new UnauthorizedException(checkHeaderToken.message);
     }
@@ -58,11 +60,12 @@ export class TodoListService {
     const token = headers.authorization.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
+    // token이상으로 에러 메세지 응답
     if(checkHeaderToken.error){
       throw new UnauthorizedException(checkHeaderToken.message);
     }
 
-    const result = this.todolistRepository.updateTodoList(userId,toDoListId,colour, toDoListName);
+    const result = this.todolistRepository.updateTodoList(toDoListId,colour, toDoListName);
 
     return result;
   }
@@ -76,6 +79,7 @@ export class TodoListService {
     const token = headers.authorization.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
+    // token이상으로 에러 메세지 응답
     if(checkHeaderToken.error){
       throw new UnauthorizedException(checkHeaderToken.message);
     }
