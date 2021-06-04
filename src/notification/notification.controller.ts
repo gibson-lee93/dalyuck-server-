@@ -22,7 +22,7 @@ export class NotificationController {
     @Headers('authorization') headers: string,
     @Body('userId') userId: number,
     @Body() createNotificationDto: CreateNotificationDto
-  ): Promise<void> {
+  ): Promise<Notification> {
     return this.notificationService.createNotification(headers, userId, createNotificationDto);
   }
 
@@ -31,7 +31,7 @@ export class NotificationController {
     @Headers('authorization') headers: string,
     @Body('userId') userId: number,
     @Body() updateNotificationDto: UpdateNotificationDto
-  ): Promise<void> {
+  ): Promise<Notification> {
     return this.notificationService.updateNotification(headers, userId, updateNotificationDto);
   }
 
