@@ -1,9 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+require('dotenv').config();
 
-// NodeJS에 있는 모든 FileSystem을
-// fs로 import 한다.
-import * as fs from 'fs';
 
 async function bootstrap() {
   
@@ -18,6 +16,6 @@ async function bootstrap() {
       allowedHeaders:'Content-Type, Accept, Authorization'
     })
     
-  await app.listen(3000);
+  await app.listen(process.env.SERVER_PORT);
 }
 bootstrap();
