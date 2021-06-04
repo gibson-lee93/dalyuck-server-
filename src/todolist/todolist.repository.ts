@@ -37,7 +37,6 @@ export class TodoListRepository extends Repository<TodoList> {
 
   // TodoList를 수정한다.
   async updateTodoList(
-    userId : number,
     toDoListId : number,
     colour : string,
     toDoListName : string 
@@ -75,13 +74,10 @@ export class TodoListRepository extends Repository<TodoList> {
       const result = await TodoList.delete({id : toDoListId});
         if(result.affected === 0){
           console.log("error1 repository(deleteTodoList) : 삭제가 제대로 안됨");
-          // throw new HttpException("User did not delete from the server", 500);
           return {error : 500, message : "TodoList did not delete from the server"};
         }
-        // throw new HttpException("User deleted", 200);
         console.log("2. repository(deleteTodoList) : 삭제가 제대로 됨");
         return {status: 200, message : "TodoList deleted"};
-        // return "User deleted";
       }
 
     catch(error){
