@@ -7,11 +7,15 @@ export class NotificationRepository extends Repository<Notification> {
 
   async createNotification(
     eventId: number,
-    alarm: string
+    alarm: string,
+    notificationId?: number
   ): Promise<Notification> {
     const notification = new Notification();
     notification.eventId = eventId;
     notification.alarm = alarm;
+    if(notificationId) {
+      notification.id = notificationId;
+    }
 
     try{
       return await notification.save();

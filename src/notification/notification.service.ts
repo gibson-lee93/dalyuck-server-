@@ -40,8 +40,9 @@ export class NotificationService {
   async createNotification(
     headers: string,
     userId: number,
-    createNotificationDto: CreateNotificationDto
-  ): Promise<void> {
+    createNotificationDto: CreateNotificationDto,
+    notificationId?: number
+  ): Promise<Notification> {
     const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
@@ -50,23 +51,22 @@ export class NotificationService {
     }
 
     const { eventId, alarm } = createNotificationDto;
-    const notification = await this.notificationRepository.createNotification(eventId, alarm);
+    const notification = await this.notificationRepository.createNotification(eventId, alarm, notificationId);
 
-    const now = DateTime.now();
-    const diff = now.diff(DateTime.fromISO(alarm)).as('milliseconds') * -1;
-    if(diff < 1) {
-      return;
+    const diff = DateTime.now().diff(DateTime.fromISO(alarm)).as('milliseconds') * -1;
+    if(diff >= 0) {
+      const user = await User.findOne({ id: userId });
+      this.sendEmail(eventId, diff, user.email, notification.id);
     }
 
-    const user = await User.findOne({ id: userId });
-    this.sendEmail(eventId, diff, user.email, notification.id);
+    return notification;
   }
 
   async updateNotification(
     headers: string,
     userId: number,
     updateNotificationDto: UpdateNotificationDto
-  ): Promise<void> {
+  ): Promise<Notification> {
     const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
 
@@ -80,7 +80,7 @@ export class NotificationService {
 
     try{
       await this.notificationRepository.delete({ id: notificationId });
-      this.createNotification(headers, userId, { eventId, alarm });
+      return await this.createNotification(headers, userId, { eventId, alarm }, notificationId);
     } catch(err) {
       console.log(err);
       throw new InternalServerErrorException('Server error occurred');
@@ -116,7 +116,7 @@ export class NotificationService {
             endTime: event.endTime
           }
         });
-      })
+      });
     });
   }
 
