@@ -36,17 +36,14 @@ export class UserController {
     return await this.userService.checkOneUser(headers, userId );
   }
 
-  // 회원가입을 한다.
   @Post('signup')
   async userSignup(
-    // Client의 Body에서 온 정보를 각각 변수로
-    // 저장
     @Body() completeBody: {
       userName : string,
       password : string,
       email : string
     },
-    @Res() res : Response // express문법의 res사용하기위한 코드
+    @Res() res : Response 
 
   ) {
 
@@ -57,15 +54,14 @@ export class UserController {
         );
 
 
-        // express문법으로 response
         res.set('Authorization', 'Bearer ' + userData.token);
         res.send({
 
-            userId : userData.id,
-            userName : userData.userName,
-            email : userData.email,
-            calender:[],
-            toDoList:[],
+            userId : userData.user.id,
+            userName : userData.user.userName,
+            email : userData.user.email,
+            calender:userData.calendar,
+            toDoList: userData.todoList,
             message : "userinfo updated"
 
         })
