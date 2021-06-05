@@ -2,11 +2,8 @@ import { Event } from './event.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
-import { InternalServerErrorException,
-  NotFoundException,
-  UnauthorizedException
-} from '@nestjs/common';
-import { Calendar } from '../calendar/calendar.entity';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
+
 
 @EntityRepository(Event)
 export class EventRepository extends Repository<Event> {
@@ -48,11 +45,6 @@ export class EventRepository extends Repository<Event> {
     const event = await this.findOne({ id: eventId });
     if(!event) {
       throw new NotFoundException('Cannot find event');
-    }
-
-    const calendar = await Calendar.findOne({ id: event.calendarId });
-    if(calendar.userId !== userId) {
-      throw new UnauthorizedException('The event is not authorized for this user');
     }
 
     event.calendarId = calendarId ? calendarId : event.calendarId;

@@ -41,7 +41,6 @@ export class AttendRequestService {
     }
 
     const { requesterEmail, requesteeEmail, eventId } = sendAttendRequestDto;
-
     const user = await User.findOne({ email: requesteeEmail });
 
     if(!user) {
@@ -70,23 +69,14 @@ export class AttendRequestService {
       throw new InternalServerErrorException('Server error occurred');
     }
 
-    const attendRequest = await this.attendRequestRepository.sendAttendRequest(requesterEmail, requesteeEmail, eventId);
-
+    const attendRequest = await this.attendRequestRepository.sendAttendRequest(sendAttendRequestDto);
     await this.confirmAttendRequest(user.id, { eventId: event.id, requestId: attendRequest.id});
   }
 
   async confirmAttendRequest(
-    // headers: string,
     userId: number,
     confirmAttendRequestDto: ConfirmAttendRequestDto
   ): Promise<void> {
-    // const token = headers.split(" ")[1];
-    // const checkHeaderToken = await checkToken(token, userId);
-    //
-    // if(checkHeaderToken.error){
-    //   throw new UnauthorizedException(checkHeaderToken.message);
-    // }
-
     const { eventId, requestId } = confirmAttendRequestDto;
 
     try{
