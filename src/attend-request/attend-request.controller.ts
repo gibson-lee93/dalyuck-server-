@@ -27,7 +27,6 @@ export class AttendRequestController {
 
   @Patch('/attend')
   confirmAttendRequest(
-    // @Headers('authorization') headers: string,
     @Body('userId') userId: number,
     @Body() confirmAttendRequestDto: ConfirmAttendRequestDto
   ): Promise<void> {
