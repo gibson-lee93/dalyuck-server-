@@ -45,6 +45,26 @@ constructor(private readonly todolistService: TodoListService) {}
     return result;
   }
 
+  // 등록되어있는 유저의 TodoList를 확인한다.(POST)
+  @Post('/:userId')
+  async postTodoList(
+    @Headers('authorization') headers: string,
+    @Param('userId', ParseIntPipe) userId: number
+  ): Promise<TodoList[]> {
+    console.log("TodoList Post activated");
+
+    if(!userId){
+      // service에서 method inquireAllMember를 이용하여
+      // 모든 DB에 있는 member정보를 받는다.
+      console.log("empty")
+      throw new UnauthorizedException({
+        "message" : "Parameter userId is empty or wrong"
+      });
+    }
+    const result = this.todolistService.getTodoList(headers, userId);
+    console.log(result)
+    return result;
+  }
 
 // TodoList를 등록한다.
 @Post()
@@ -59,7 +79,7 @@ toDoListName : string
 }
 
 ) {
-
+  console.log("공백 Post")
   const userTodoList = await this.todolistService.insertTodoList(
     headers,
     completeBody.userId,

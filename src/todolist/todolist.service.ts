@@ -20,12 +20,12 @@ export class TodoListService {
   ): Promise<TodoList[]> {
     const token = headers.split(" ")[1];
     const checkHeaderToken = await checkToken(token, userId);
-
+    console.log("getTodoList1");
     // token이상으로 에러 메세지 응답
     if(checkHeaderToken.error){
       throw new UnauthorizedException(checkHeaderToken.message);
     }
-
+    console.log("getTodoList2");
     return await this.todolistRepository.find({ userId });
   }
 
