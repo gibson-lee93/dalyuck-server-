@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Headers, Patch, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Post, Body, Headers, Patch, Param, ParseIntPipe } from '@nestjs/common';
 import { AttendRequestService } from './attend-request.service';
 import { SendAttendRequestDto } from './dto/send-attend-request.dto';
 import { ConfirmAttendRequestDto } from './dto/confirm-attend-request.dto';
@@ -8,7 +8,7 @@ import { Event } from '../event/event.entity';
 export class AttendRequestController {
   constructor(private attendRequestService: AttendRequestService) {}
 
-  @Get('/attend/:id')
+  @Post('/attend/:id')
   getAttendEvent(
     @Headers('authorization') headers: string,
     @Param('id', ParseIntPipe) userId: number,

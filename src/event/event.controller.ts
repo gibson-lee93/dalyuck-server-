@@ -5,7 +5,6 @@ import {
   Patch,
   Delete,
   Headers,
-  Get,
   ParseIntPipe,
   Param,
   Query } from '@nestjs/common';
@@ -18,7 +17,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 export class EventController {
   constructor(private eventService: EventService) {}
 
-  @Get('/:id')
+  @Post('/:id')
   getEvent(
     @Headers('authorization') headers: string,
     @Param('id', ParseIntPipe) userId: number,

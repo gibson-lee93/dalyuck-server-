@@ -1,4 +1,14 @@
-import { Controller, Post, Headers, Body, Patch, Delete, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Headers,
+  Body,
+  Patch,
+  Delete,
+  Param,
+  ParseIntPipe,
+  Query
+} from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
@@ -8,11 +18,11 @@ import { Notification } from './notification.entity';
 export class NotificationController {
   constructor(private notificationService: NotificationService) {}
 
-  @Get()
+  @Post('/:id')
   getNotification(
     @Headers('authorization') headers: string,
-    @Body('userId') userId: number,
-    @Body('eventId') eventId: number
+    @Param('id', ParseIntPipe) userId: number,
+    @Query('eventId', ParseIntPipe) eventId: number
   ): Promise<Notification[]> {
     return this.notificationService.getNotification(headers, userId, eventId);
   }

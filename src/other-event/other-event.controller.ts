@@ -1,4 +1,4 @@
-import { Controller, Get, Headers, Param, Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Post, Headers, Param, Query, ParseIntPipe } from '@nestjs/common';
 import { OtherEventService } from './other-event.service';
 import { OtherEvent } from './other-event.entity';
 
@@ -6,7 +6,7 @@ import { OtherEvent } from './other-event.entity';
 export class OtherEventController {
   constructor(private otherEventService: OtherEventService) {}
 
-  @Get('/:id')
+  @Post('/:id')
   getCalendar(
     @Headers('authorization') headers: string,
     @Param('id', ParseIntPipe) userId: number,
