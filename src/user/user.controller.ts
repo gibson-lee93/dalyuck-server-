@@ -196,11 +196,7 @@ export class UserController {
             res.set('Authorization', 'Bearer ' + user.token);
             delete user.token;
             res.send({
-              "userId" : user.id,
-              "userName" : user.userName,
-              "email" : user.email,
-              "calendar" : user.calendar,
-              "toDoList" : user.todolist
+              user
             });
           }
 
