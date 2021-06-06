@@ -5,6 +5,7 @@ import { EventRepository } from './event.repository';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { checkToken } from '../function/token/createToken';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class EventService {
@@ -12,6 +13,18 @@ export class EventService {
     @InjectRepository(EventRepository)
     private eventRepository: EventRepository
   ) {}
+
+  async getAttendEvent(headers: string, userId: number): Promise<Event[]> {
+    const token = headers.split(" ")[1];
+    const checkHeaderToken = await checkToken(token, userId);
+
+    if(checkHeaderToken.error){
+      throw new UnauthorizedException(checkHeaderToken.message);
+    }
+
+    const user = await User.findOne({ id: userId });
+    return user.attendEvents;
+  }
 
   async getEvent(
     headers: string,

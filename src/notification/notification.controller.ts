@@ -7,7 +7,8 @@ import {
   Delete,
   Param,
   ParseIntPipe,
-  Query
+  Query,
+  HttpCode
 } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
@@ -19,6 +20,7 @@ export class NotificationController {
   constructor(private notificationService: NotificationService) {}
 
   @Post('/:id')
+  @HttpCode(200)
   getNotification(
     @Headers('authorization') headers: string,
     @Param('id', ParseIntPipe) userId: number,

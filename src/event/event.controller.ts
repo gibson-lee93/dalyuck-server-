@@ -7,6 +7,7 @@ import {
   Headers,
   ParseIntPipe,
   Param,
+  HttpCode,
   Query } from '@nestjs/common';
 import { Event } from './event.entity';
 import { EventService } from './event.service';
@@ -17,7 +18,17 @@ import { UpdateEventDto } from './dto/update-event.dto';
 export class EventController {
   constructor(private eventService: EventService) {}
 
+  @Post('/attend/')
+  @HttpCode(200)
+  getAttendEvent(
+    @Headers('authorization') headers: string,
+    @Query('id', ParseIntPipe) userId: number,
+  ): Promise<Event[]> {
+    return this.eventService.getAttendEvent(headers, userId);
+  }
+
   @Post('/:id')
+  @HttpCode(200)
   getEvent(
     @Headers('authorization') headers: string,
     @Param('id', ParseIntPipe) userId: number,

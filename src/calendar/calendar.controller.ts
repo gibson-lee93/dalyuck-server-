@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Delete, Headers, ParseIntPipe, Param } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Delete, Headers, ParseIntPipe, Param, HttpCode } from '@nestjs/common';
 import { CalendarService } from './calendar.service';
 import { CreateCalendarDto } from './dto/create-calendar.dto';
 import { UpdateCalendarDto } from './dto/update-calendar.dto';
@@ -18,6 +18,7 @@ export class CalendarController {
   }
 
   @Post('/:id')
+  @HttpCode(200)
   getCalendar(
     @Headers('authorization') headers: string,
     @Param('id', ParseIntPipe) userId: number,
