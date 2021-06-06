@@ -7,15 +7,6 @@ import { ConfirmAttendRequestDto } from './dto/confirm-attend-request.dto';
 export class AttendRequestController {
   constructor(private attendRequestService: AttendRequestService) {}
 
-  @Post('/attend')
-  sendAttendRequest(
-    @Headers('authorization') headers: string,
-    @Body('userId') userId: number,
-    @Body() sendAttendRequestDto: SendAttendRequestDto
-  ): Promise<void> {
-    return this.attendRequestService.sendAttendRequest(headers, userId, sendAttendRequestDto);
-  }
-
   @Patch('/attend')
   confirmAttendRequest(
     @Body('userId') userId: number,

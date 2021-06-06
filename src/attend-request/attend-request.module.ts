@@ -9,6 +9,7 @@ import { AttendRequestRepository } from './attend-request.repository';
     TypeOrmModule.forFeature([AttendRequestRepository])
   ],
   providers: [AttendRequestService],
-  controllers: [AttendRequestController]
+  controllers: [AttendRequestController],
+  exports: [AttendRequestService]
 })
 export class AttendRequestModule {}
