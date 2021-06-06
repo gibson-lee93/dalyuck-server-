@@ -8,17 +8,34 @@ import {
   ParseIntPipe,
   Param,
   HttpCode,
-  Query } from '@nestjs/common';
+  Inject,
+  Query
+} from '@nestjs/common';
 import { Event } from './event.entity';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { AttendRequestService } from '../attend-request/attend-request.service';
+import { SendAttendRequestDto } from '../attend-request/dto/send-attend-request.dto';
 
 @Controller('event')
 export class EventController {
-  constructor(private eventService: EventService) {}
+  constructor(
+    private eventService: EventService,
+    @Inject(AttendRequestService)
+    private attendRequestService: AttendRequestService
+  ) {}
 
   @Post('/attend')
+  sendAttendRequest(
+    @Headers('authorization') headers: string,
+    @Body('userId') userId: number,
+    @Body() sendAttendRequestDto: SendAttendRequestDto
+  ): Promise<void> {
+    return this.attendRequestService.sendAttendRequest(headers, userId, sendAttendRequestDto);
+  }
+
+  @Post('/attendant')
   @HttpCode(200)
   getAttendEvent(
     @Headers('authorization') headers: string,
