@@ -174,18 +174,18 @@ export class UserController {
               "OAuthUser_Google",
               completeBody.email
             )
-
+            console.log(userData);
             // Client에 줄 Token 셋팅
             res.set('Authorization', 'Bearer ' + userData.token);
             // 정상처리로 statusCode는 200
             res.status(200);
             // 회원가입한 후이기 때문에 모든 정보를 Client쪽으로 전달
             res.send({
-              userId : userData.id,
-              userName : userData.userName,
-              email : userData.email,
+              userId : userData.user.id,
+              userName : userData.user.userName,
+              email : userData.user.email,
               calender:userData.calendar,
-              toDoList:userData.todolist,
+              toDoList:userData.todoList,
               message : "userinfo updated"
             });
           }
@@ -196,11 +196,7 @@ export class UserController {
             res.set('Authorization', 'Bearer ' + user.token);
             delete user.token;
             res.send({
-              "userId" : user.id,
-              "userName" : user.userName,
-              "email" : user.email,
-              "calendar" : user.calendar,
-              "toDoList" : user.todolist
+              user
             });
           }
 
