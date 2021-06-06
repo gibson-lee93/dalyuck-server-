@@ -184,8 +184,8 @@ export class UserController {
               userId : userData.id,
               userName : userData.userName,
               email : userData.email,
-              calender:[],
-              toDoList:[],
+              calender:userData.calendar,
+              toDoList:userData.todolist,
               message : "userinfo updated"
             });
           }
