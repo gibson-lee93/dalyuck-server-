@@ -8,15 +8,6 @@ import { OtherCalendar } from '../other-calendar/other-calendar.entity';
 export class RequestEmailController {
   constructor(private requestEmailService: RequestEmailService) {}
 
-  @Post('/subscribe')
-  subscribeCalendar(
-    @Headers('authorization') headers: string,
-    @Body('userId') userId: number,
-    @Body() subscribeCalendarDto: SubscribeCalendarDto
-  ): Promise<OtherCalendar> {
-    return this.requestEmailService.subscribeCalendar(headers, userId, subscribeCalendarDto);
-  }
-
   @Post('/request')
   grantSubscription(
     @Headers('authorization') headers: string,

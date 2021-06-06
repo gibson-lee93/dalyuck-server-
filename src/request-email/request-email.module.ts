@@ -11,6 +11,7 @@ import { OtherCalendarModule } from '../other-calendar/other-calendar.module';
     OtherCalendarModule
   ],
   providers: [RequestEmailService],
-  controllers: [RequestEmailController]
+  controllers: [RequestEmailController],
+  exports: [RequestEmailService]
 })
 export class RequestEmailModule {}
