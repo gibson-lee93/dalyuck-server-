@@ -1,12 +1,38 @@
-import { Controller, Post, Body, Patch, Delete, Headers, ParseIntPipe, Param, HttpCode } from '@nestjs/common';
+import { Controller,
+  Post,
+  Body,
+  Patch,
+  Delete,
+  Headers,
+  ParseIntPipe,
+  Param,
+  HttpCode,
+  Inject
+} from '@nestjs/common';
 import { CalendarService } from './calendar.service';
 import { CreateCalendarDto } from './dto/create-calendar.dto';
 import { UpdateCalendarDto } from './dto/update-calendar.dto';
 import { Calendar } from './calendar.entity';
+import { RequestEmailService } from '../request-email/request-email.service';
+import { SubscribeCalendarDto } from '../request-email/dto/subscribe-calendar.dto';
+import { OtherCalendar } from '../other-calendar/other-calendar.entity';
 
 @Controller('calendar')
 export class CalendarController {
-  constructor(private calendarService: CalendarService) {}
+  constructor(
+    private calendarService: CalendarService,
+    @Inject(RequestEmailService)
+    private requestEmailService: RequestEmailService
+  ) {}
+
+  @Post('/subscribe')
+  subscribeCalendar(
+    @Headers('authorization') headers: string,
+    @Body('userId') userId: number,
+    @Body() subscribeCalendarDto: SubscribeCalendarDto
+  ): Promise<OtherCalendar> {
+    return this.requestEmailService.subscribeCalendar(headers, userId, subscribeCalendarDto);
+  }
 
   @Post('/search')
   searchCalendar(

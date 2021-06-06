@@ -18,11 +18,11 @@ import { UpdateEventDto } from './dto/update-event.dto';
 export class EventController {
   constructor(private eventService: EventService) {}
 
-  @Post('/attend/')
+  @Post('/attend')
   @HttpCode(200)
   getAttendEvent(
     @Headers('authorization') headers: string,
-    @Query('id', ParseIntPipe) userId: number,
+    @Body('userId', ParseIntPipe) userId: number,
   ): Promise<Event[]> {
     return this.eventService.getAttendEvent(headers, userId);
   }
