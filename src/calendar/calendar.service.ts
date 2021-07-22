@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Calendar } from './calendar.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CalendarRepository } from './calendar.repository';
 import { CreateCalendarDto } from './dto/create-calendar.dto';
 import { UpdateCalendarDto } from './dto/update-calendar.dto';
-import { checkToken } from '../function/token/createToken';
 import { OtherCalendar } from '../other-calendar/other-calendar.entity';
+import { User } from '../user/user.entity';
 import { searchCalendar, searchOtherCalendar, searchAttendEvent } from '../function/query/queryFunctions';
 import { DateTime } from 'luxon';
 
@@ -17,17 +17,10 @@ export class CalendarService {
   ) {}
 
   async searchCalendar(
-    headers: string,
-    userId: number,
-    keyword: string
+    keyword: string,
+    user: User
   ): Promise<{ event:[], message: string }> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
+    const userId = user.id;
     const event = await this.calendarRepository.query(searchCalendar(userId, keyword));
     const otherEvent = await this.calendarRepository.query(searchOtherCalendar(userId, keyword));
     const attendEvent = await this.calendarRepository.query(searchAttendEvent(userId, keyword));
@@ -43,64 +36,31 @@ export class CalendarService {
   }
 
   async getCalendar(
-    headers: string,
-    userId: number
+    user: User
   ): Promise<{ calendar: {}, otherCalendars: {} }> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
     const result = { calendar: {}, otherCalendars: {} };
-    result.calendar = await this.calendarRepository.find({ userId });
-    result.otherCalendars = await OtherCalendar.find({ userId });
+    result.calendar = await this.calendarRepository.find({ userId: user.id });
+    result.otherCalendars = await OtherCalendar.find({ userId: user.id });
     return result;
   }
 
   async createCalendar(
     createCalendarDto: CreateCalendarDto,
-    userId: number,
-    headers: string
+    user: User
   ): Promise<Calendar> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
-    return this.calendarRepository.createCalendar(userId, createCalendarDto );
+    return this.calendarRepository.createCalendar(user.id, createCalendarDto );
   }
 
   async updateCalendar(
-    userId: number,
-    headers: string,
-    updateCalendarDto: UpdateCalendarDto
+    updateCalendarDto: UpdateCalendarDto,
+    user: User
   ): Promise<Calendar> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
-    return this.calendarRepository.updateCalendar(userId, updateCalendarDto);
+    return this.calendarRepository.updateCalendar(user.id, updateCalendarDto);
   }
 
   async deleteCalendar(
-    headers: string,
-    userId: number,
     calendarId: number
   ): Promise<void> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
     const result = await this.calendarRepository.delete({ id: calendarId });
 
     if(result.affected === 0) {
