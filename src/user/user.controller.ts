@@ -44,48 +44,12 @@ export class UserController {
     return this.userService.signUp(authCredentialsDto);
   }
 
-  // @Post('signup')
-  // async userSignup(
-  //   @Body() completeBody: {
-  //     userName : string,
-  //     password : string,
-  //     email : string
-  //   },
-  //   @Res() res : Response
-  //
-  // ) {
-  //       const userData = await this.userService.insertUser(
-  //         completeBody.userName,
-  //         completeBody.password,
-  //         completeBody.email
-  //       );
-  //
-  //
-  //       res.set('Authorization', 'Bearer ' + userData.token);
-  //       res.send({
-  //
-  //           userId : userData.user.id,
-  //           userName : userData.user.userName,
-  //           email : userData.user.email,
-  //           calender:userData.calendar,
-  //           toDoList: userData.todoList,
-  //           message : "userinfo updated"
-  //
-  //       })
-  // }
-
-  // @Post('/login')
-  // @HttpCode(200)
-  // async logIn(
-  //   @Body('email') email: string,
-  //   @Body('password') password: string,
-  //   @Res() res : Response
-  // ): Promise<any> {
-  //   const user = await this.userService.logIn(email, password);
-  //   res.set('Authorization', 'Bearer ' + user.token);
-  //   delete user.token;
-  //   res.send({ user });
-  // }
+  @Post('login')
+  logIn(
+    @Body() authCredentialsDto: AuthCredentialsDto
+  ): Promise<{ user: User, accessToken: string }> {
+    return this.userService.logIn(authCredentialsDto);
+  }
   //
   // // 회원의 정보를 수정한다.
   // @Patch('info')

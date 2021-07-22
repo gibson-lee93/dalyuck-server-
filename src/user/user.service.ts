@@ -8,12 +8,16 @@ import { Calendar } from '../calendar/calendar.entity';
 import { insertHolidayCalendar, insertHolidayEvent } from '../function/query/queryFunctions';
 import { OtherCalendar } from '../other-calendar/other-calendar.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserRepository)
-    private userRepository: UserRepository
+    private userRepository: UserRepository,
+    private jwtService: JwtService
   ) {}
 
   // userDB를 확인하기 위한 method
@@ -51,25 +55,22 @@ export class UserService {
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     return this.userRepository.createUser(authCredentialsDto);
   }
-  // Controller에서 회원정보 등록 요청시 method
-  // async insertUser(
-  //   userName : string,
-  //   password : string,
-  //   email : string,
-  // ) : Promise <any>{
-  //
-  //     console.log("Input userName : ", userName, typeof userName);
-  //
-  //     return this.userRepository.signupUser(userName,password, email);
-  // }
 
+  async logIn(
+    authCredentialsDto: AuthCredentialsDto
+  ): Promise<{ user: User, accessToken: string }> {
+    const { email, password } = authCredentialsDto;
+    const user = await this.userRepository.findOne({ email });
 
-  // async logIn(email: string, password: string): Promise<User> {
-  //
-  //   return this.userRepository.loginUser(email, password)
-  //
-  //
-  // }
+    if(user && (await bcrypt.compare(password, user.password))) {
+      const payload: JwtPayload = { email };
+      const accessToken = await this.jwtService.sign(payload);
+      delete user.password;
+      return { user, accessToken };
+    } else {
+      throw new UnauthorizedException('Please check your login credentials');
+    }
+  }
   //
   // // Controller에서 회원정보 수정 요청시 method
   // async editUserInfo(
