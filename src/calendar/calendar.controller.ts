@@ -1,14 +1,14 @@
-import { Controller,
+import {
+  Get,
+  Controller,
   Post,
   Body,
   Patch,
   Delete,
-  Headers,
-  ParseIntPipe,
-  Param,
-  HttpCode,
-  Inject
+  Inject,
+  UseGuards
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { CalendarService } from './calendar.service';
 import { CreateCalendarDto } from './dto/create-calendar.dto';
 import { UpdateCalendarDto } from './dto/update-calendar.dto';
@@ -16,8 +16,11 @@ import { Calendar } from './calendar.entity';
 import { RequestEmailService } from '../request-email/request-email.service';
 import { SubscribeCalendarDto } from '../request-email/dto/subscribe-calendar.dto';
 import { OtherCalendar } from '../other-calendar/other-calendar.entity';
+import { GetUser } from '../user/get-user.decorator';
+import { User } from '../user/user.entity';
 
 @Controller('calendar')
+@UseGuards(AuthGuard())
 export class CalendarController {
   constructor(
     private calendarService: CalendarService,
@@ -27,55 +30,47 @@ export class CalendarController {
 
   @Post('/subscribe')
   subscribeCalendar(
-    @Headers('authorization') headers: string,
-    @Body('userId') userId: number,
-    @Body() subscribeCalendarDto: SubscribeCalendarDto
+    @Body() subscribeCalendarDto: SubscribeCalendarDto,
+    @GetUser() user: User
   ): Promise<OtherCalendar> {
-    return this.requestEmailService.subscribeCalendar(headers, userId, subscribeCalendarDto);
+    return this.requestEmailService.subscribeCalendar(subscribeCalendarDto, user);
   }
 
   @Post('/search')
   searchCalendar(
-    @Headers('authorization') headers: string,
-    @Body('userId') userId: number,
-    @Body('keyword') keyword: string
+    @Body('keyword') keyword: string,
+    @GetUser() user: User
   ): Promise<{ event:[], message: string }> {
-    return this.calendarService.searchCalendar(headers, userId, keyword);
+    return this.calendarService.searchCalendar(keyword, user);
   }
 
-  @Post('/:id')
-  @HttpCode(200)
+  @Get()
   getCalendar(
-    @Headers('authorization') headers: string,
-    @Param('id', ParseIntPipe) userId: number,
+    @GetUser() user: User
   ): Promise<{ calendar: {}, otherCalendars: {} }> {
-    return this.calendarService.getCalendar(headers, userId);
+    return this.calendarService.getCalendar(user);
   }
 
   @Post()
   createCalendar(
     @Body() createCalendarDto: CreateCalendarDto,
-    @Body('userId') userId: number,
-    @Headers('authorization') headers: string
+    @GetUser() user: User,
   ): Promise<Calendar> {
-    return this.calendarService.createCalendar(createCalendarDto, userId, headers);
+    return this.calendarService.createCalendar(createCalendarDto, user);
   }
 
   @Patch()
   updateCalendar(
-    @Headers('authorization') headers: string,
-    @Body('userId') userId: number,
-    @Body() updateCalendarDto: UpdateCalendarDto
+    @Body() updateCalendarDto: UpdateCalendarDto,
+    @GetUser() user: User,
   ): Promise<Calendar> {
-    return this.calendarService.updateCalendar(userId, headers, updateCalendarDto);
+    return this.calendarService.updateCalendar(updateCalendarDto, user);
   }
 
   @Delete()
   deleteCalendar(
-    @Headers('authorization') headers: string,
-    @Body('userId') userId: number,
     @Body('calendarId') calendarId: number
   ): Promise<void> {
-    return this.calendarService.deleteCalendar(headers, userId, calendarId);
+    return this.calendarService.deleteCalendar(calendarId);
   }
 }

@@ -26,25 +26,11 @@ export class RequestEmailService {
   ) {}
 
   async subscribeCalendar(
-    headers: string,
-    userId: number,
-    subscribeCalendarDto: SubscribeCalendarDto
+    subscribeCalendarDto: SubscribeCalendarDto,
+    user: User
   ): Promise<OtherCalendar> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
     const { requesterEmail, requesteeEmail } = subscribeCalendarDto;
-
-    const user = await User.findOne({ email: requesteeEmail });
     const calendar = await Calendar.findOne({ userId: user.id });
-
-    if(!user) {
-      throw new NotFoundException(`${requesteeEmail} has no dalyuck account`);
-    }
 
     try{
       await this.sendEmail(requesteeEmail, requesterEmail,
@@ -55,21 +41,13 @@ export class RequestEmailService {
     }
 
     await this.requestEmailRepository.subscribeCalendar(requesterEmail, requesteeEmail);
-    return await this.grantSubscription(headers, userId, { calendarId: calendar.id, requesterEmail, requesteeEmail });
+    return await this.grantSubscription({ calendarId: calendar.id, requesterEmail, requesteeEmail }, user);
   }
 
   async grantSubscription(
-    headers: string,
-    userId: number,
-    grantSubscriptionDto: GrantSubscriptionDto
+    grantSubscriptionDto: GrantSubscriptionDto,
+    user: User
   ): Promise<OtherCalendar> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
     const { calendarId, requesterEmail, requesteeEmail } = grantSubscriptionDto;
 
     try{
@@ -81,7 +59,7 @@ export class RequestEmailService {
     }
 
     const requestEamil = await this.requestEmailRepository.grantSubscription(calendarId, requesterEmail, requesteeEmail);
-    return await this.otherCalendarService.confirmSubscription(headers, userId, requestEamil.id);
+    return await this.otherCalendarService.confirmSubscription(requestEamil.id, user);
   }
 
   async sendEmail(

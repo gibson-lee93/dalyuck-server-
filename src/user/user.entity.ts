@@ -19,17 +19,11 @@ export class User extends BaseEntity {
   @Column()
   userName: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
   password: string;
-
-  @Column()
-  salt: string;
-
-  @Column({nullable:true})
-  token: string;
 
   @OneToMany(type => Calendar, calendar => calendar.user, {
   eager: true,

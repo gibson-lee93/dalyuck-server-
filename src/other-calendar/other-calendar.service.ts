@@ -5,6 +5,7 @@ import { OtherCalendar } from './other-calendar.entity';
 import { checkToken } from '../function/token/createToken';
 import { RequestEmail } from '../request-email/request-email.entity';
 import { UpdateOtherCalendarDto } from './dto/update-other-calendar.dto';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class OtherCalendarService {
@@ -14,21 +15,13 @@ export class OtherCalendarService {
   ) {}
 
   async confirmSubscription(
-    headers: string,
-    userId: number,
-    requestEmailId: number
+    requestEmailId: number,
+    user: User
   ): Promise<OtherCalendar> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
     const requestEmail = await RequestEmail.findOne({ id: requestEmailId });
-    
+
     try{
-      const otherCalendar = await this.otherCalendarRepository.confirmSubscription(requestEmail.calendarId, userId);
+      const otherCalendar = await this.otherCalendarRepository.confirmSubscription(requestEmail.calendarId, user.id);
       await RequestEmail.delete({ id: requestEmailId });
       return otherCalendar;
     } catch(err) {
