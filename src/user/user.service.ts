@@ -103,13 +103,14 @@ export class UserService {
       throw new InternalServerErrorException();
     }
   }
-  // // Controller에서 회원정보 삭제 요청시 method
-  // async deleteUserInfo(userId : number, password:string, headers: any) : Promise <any>{
-  //
-  //   return this.userRepository.deleteUser(userId, password, headers);
-  //
-  // }
-  //
+
+  async deleteUser(user: User): Promise<void> {
+    const result = await this.userRepository.delete({ id: user.id });
+
+    if(result.affected === 0) {
+      throw new NotFoundException(`User with ID "${user.id}" not found`);
+    }
+  }
   // async logOut(headers: any, userId: number): Promise<void> {
   //   const token = headers.authorization.split(" ")[1];
   //   const checkHeaderToken = await checkToken(token, userId);

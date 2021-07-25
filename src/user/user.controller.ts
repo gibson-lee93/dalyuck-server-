@@ -57,36 +57,21 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard())
-  @Patch('info')
+  @Patch()
   async updateUser(
     @Body() updateUserDto: UpdateUserDto,
     @GetUser() user: User,
   ): Promise<User> {
     return this.userService.updateUser(updateUserDto, user);
   }
-  //
-  // // 회원정보를 삭제한다.
-  // @Delete('info')
-  // async userDelete(
-  //   @Body('userId') userId : number,
-  //   @Body('password') password : string,
-  //   @Headers() headers
-  // ) : Promise <any> {
-  //   console.log("password" , password);
-  //
-  //
-  //   const deleteUser = await this.userService.deleteUserInfo(userId,password,headers);
-  //
-  //   console.log("deleteUser : ", deleteUser);
-  //
-  //   if(deleteUser.error){
-  //     throw new HttpException(deleteUser.message, deleteUser.error);
-  //   }
-  //
-  //   return deleteUser;
-  //
-  // }
-  //
+
+  @UseGuards(AuthGuard())
+  @Delete()
+  async deleteUser(
+    @GetUser() user: User
+  ): Promise<void> {
+    return this.userService.deleteUser(user);
+  }
   // // 로그아웃 한다.
   // @Post('/logout')
   // @HttpCode(200)
