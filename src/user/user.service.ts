@@ -21,38 +21,6 @@ export class UserService {
     private jwtService: JwtService
   ) {}
 
-  // userDB를 확인하기 위한 method
-  // async postUser():  Promise <User[]> {
-  //   return await this.userRepository.find()
-  // }
-  //
-  // // userDB를 확인하기 위한 method
-  // async checkOneUser(
-  //   headers: any,
-  //   userId : number
-  // ):  Promise <User> {
-  //
-  //   const token = headers.authorization.split(" ")[1];
-  //   const checkHeaderToken = await checkToken(token, userId);
-  //
-  //   if(checkHeaderToken.error){
-  //     throw new UnauthorizedException(checkHeaderToken.message);
-  //   }
-  //
-  //   // 해당 userId를 찾아서 해당 캘린더 정보를 모두 보내준다.
-  //   const result =  await this.userRepository.findOne({
-  //     where:{id : checkHeaderToken.userId},
-  //     relations:["calendar"]
-  //   })
-  //
-  //   delete result.password;
-  //   delete result.salt;
-  //   delete result.token;
-  //
-  //   return result;
-  //
-  // }
-
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     return this.userRepository.createUser(authCredentialsDto);
   }
