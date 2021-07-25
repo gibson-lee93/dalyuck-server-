@@ -1,18 +1,12 @@
 import {
   Injectable,
-  HttpException,
   UnauthorizedException,
   NotFoundException,
   InternalServerErrorException
  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {createToken, checkToken} from '../function/token/createToken';
 import { User } from "./user.entity";
 import { UserRepository } from './user.repository';
-import { TodoList } from '../todolist/todolist.entity';
-import { Calendar } from '../calendar/calendar.entity';
-import { insertHolidayCalendar, insertHolidayEvent } from '../function/query/queryFunctions';
-import { OtherCalendar } from '../other-calendar/other-calendar.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -111,23 +105,4 @@ export class UserService {
       throw new NotFoundException(`User with ID "${user.id}" not found`);
     }
   }
-  // async logOut(headers: any, userId: number): Promise<void> {
-  //   const token = headers.authorization.split(" ")[1];
-  //   const checkHeaderToken = await checkToken(token, userId);
-  //
-  //   if(checkHeaderToken.error){
-  //     throw new UnauthorizedException(checkHeaderToken.message);
-  //   }
-  //
-  //   const user = await this.userRepository.findOne({ id: userId });
-  //   user.token = '';
-  //
-  //   try{
-  //     await user.save();
-  //   } catch(err) {
-  //     throw new HttpException("Server error occurred", 500);
-  //   }
-  // }
-
-
 }

@@ -1,7 +1,5 @@
 import {
   InternalServerErrorException,
-  HttpException,
-  NotFoundException,
   ConflictException
 } from '@nestjs/common';
 import { User } from './user.entity';
@@ -10,7 +8,6 @@ import { TodoList } from '../todolist/todolist.entity';
 import { Calendar } from '../calendar/calendar.entity';
 import { insertHolidayCalendar, insertHolidayEvent } from '../function/query/queryFunctions';
 import { OtherCalendar } from '../other-calendar/other-calendar.entity';
-import {createToken, checkToken} from '../function/token/createToken';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import * as bcrypt from 'bcrypt';
 

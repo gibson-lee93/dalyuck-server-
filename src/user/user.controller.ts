@@ -1,19 +1,12 @@
 import {
   Controller,
   Body,
-  Get,
   Post,
-  HttpException,
-  Res,
   Patch,
   Delete,
-  Headers,
-  HttpStatus,
-  HttpCode,
   UseGuards
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Response } from 'express';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { verify } from '../function/oauth/googleOauth';
@@ -58,7 +51,7 @@ export class UserController {
 
   @UseGuards(AuthGuard())
   @Patch()
-  async updateUser(
+  updateUser(
     @Body() updateUserDto: UpdateUserDto,
     @GetUser() user: User,
   ): Promise<User> {
@@ -67,20 +60,11 @@ export class UserController {
 
   @UseGuards(AuthGuard())
   @Delete()
-  async deleteUser(
+  deleteUser(
     @GetUser() user: User
   ): Promise<void> {
     return this.userService.deleteUser(user);
   }
-  // // 로그아웃 한다.
-  // @Post('/logout')
-  // @HttpCode(200)
-  // logOut(
-  //   @Headers() headers,
-  //   @Body('userId') userId: number
-  // ): Promise<void> {
-  //   return this.userService.logOut(headers, userId);
-  // }
 
   // Google OAuth 2.0회원가입을 한다.
   // @Post('/oauth/google')
