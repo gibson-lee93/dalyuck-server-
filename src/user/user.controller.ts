@@ -1,20 +1,25 @@
-import { Controller,
-          Body,
-          Get,
-          Post,
-          HttpException,
-          Res,
-          Patch,
-          Delete,
-          Headers,
-          HttpStatus,
-          HttpCode
-       } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  Get,
+  Post,
+  HttpException,
+  Res,
+  Patch,
+  Delete,
+  Headers,
+  HttpStatus,
+  HttpCode,
+  UseGuards
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { User } from './user.entity';
 import { verify } from '../function/oauth/googleOauth';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { UpdateUserDto} from './dto/update-user.dto';
+import { GetUser } from './get-user.decorator';
 
 @Controller('user')
 export class UserController {
@@ -50,37 +55,15 @@ export class UserController {
   ): Promise<{ user: User, accessToken: string }> {
     return this.userService.logIn(authCredentialsDto);
   }
-  //
-  // // 회원의 정보를 수정한다.
-  // @Patch('info')
-  // async userEdit(
-  //   @Body() completeBody: {
-  //     userId : number,
-  //     userName : string,
-  //     oldPassword : string,
-  //     newPassword : string
-  //   },
-  //   @Headers() headers
-  // ) : Promise <any> {
-  //   const {userId,userName,oldPassword,newPassword} = completeBody;
-  //
-  //   const result = await this.userService.editUserInfo(userId, oldPassword, newPassword,userName,headers);
-  //   console.log("result : ", result);
-  //
-  //   // 에러 발생시 if문 실행
-  //   if(typeof result === "object" && result.message !== "userinfo updated"){
-  //     if(result.error === 500){
-  //       throw new HttpException(result.message, HttpStatus.INTERNAL_SERVER_ERROR);
-  //     }
-  //
-  //     else{
-  //       throw new HttpException(result.message, result.error);
-  //     }
-  //
-  //   }
-  //   throw new HttpException("userinfo updated", 200);
-  //
-  // }
+
+  @UseGuards(AuthGuard())
+  @Patch('info')
+  async updateUser(
+    @Body() updateUserDto: UpdateUserDto,
+    @GetUser() user: User,
+  ): Promise<User> {
+    return this.userService.updateUser(updateUserDto, user);
+  }
   //
   // // 회원정보를 삭제한다.
   // @Delete('info')

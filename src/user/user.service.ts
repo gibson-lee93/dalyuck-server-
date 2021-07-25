@@ -1,4 +1,10 @@
-import { Injectable, HttpException, UnauthorizedException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  UnauthorizedException,
+  NotFoundException,
+  InternalServerErrorException
+ } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {createToken, checkToken} from '../function/token/createToken';
 import { User } from "./user.entity";
@@ -11,6 +17,7 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './jwt-payload.interface';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -71,23 +78,31 @@ export class UserService {
       throw new UnauthorizedException('Please check your login credentials');
     }
   }
-  //
-  // // Controller에서 회원정보 수정 요청시 method
-  // async editUserInfo(
-  //     userId:number,
-  //     oldPassword:string,
-  //     newPassword:string,
-  //     userName:string,
-  //     headers: any
-  //     ) : Promise <any>{
-  //
-  //   return this.userRepository.updateUser(userId, oldPassword, newPassword, userName, headers)
-  //
-  //
-  // }
-  //
-  //
-  //
+
+  async updateUser(
+    updateUserDto: UpdateUserDto,
+    user: User
+  ): Promise<User> {
+    const { userName, password } = updateUserDto;
+
+    if(userName) {
+      user.userName = userName;
+    }
+
+    if(password) {
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(password, salt);
+      user.password = hashedPassword;
+    }
+
+    try {
+      await this.userRepository.save(user);
+      delete user.password;
+      return user;
+    } catch (err) {
+      throw new InternalServerErrorException();
+    }
+  }
   // // Controller에서 회원정보 삭제 요청시 method
   // async deleteUserInfo(userId : number, password:string, headers: any) : Promise <any>{
   //
