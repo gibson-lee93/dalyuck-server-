@@ -9,16 +9,21 @@ import {
   Param,
   HttpCode,
   Inject,
-  Query
+  Query,
+  UseGuards
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Event } from './event.entity';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { AttendRequestService } from '../attend-request/attend-request.service';
 import { SendAttendRequestDto } from '../attend-request/dto/send-attend-request.dto';
+import { GetUser } from '../user/get-user.decorator';
+import { User } from '../user/user.entity';
 
 @Controller('event')
+@UseGuards(AuthGuard())
 export class EventController {
   constructor(
     private eventService: EventService,
@@ -56,11 +61,9 @@ export class EventController {
 
   @Post()
   createEvent(
-    @Headers('authorization') headers: string,
-    @Body('userId') userId: number,
-    @Body() createEventDto: CreateEventDto
+    @Body() createEventDto: CreateEventDto,
   ): Promise<Event> {
-    return this.eventService.createEvent(headers, userId, createEventDto);
+    return this.eventService.createEvent(createEventDto);
   }
 
   @Patch()

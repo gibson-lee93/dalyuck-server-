@@ -15,24 +15,19 @@ export class EventRepository extends Repository<Event> {
       location, colour
     } = createEventDto;
 
-    const event = new Event();
-    event.calendarId = calendarId;
-    event.startTime = startTime;
-    event.endTime = endTime;
-    event.eventName = eventName;
-    event.description = description;
-    event.access = access;
-    event.location = location;
-    event.colour = colour;
+    const event = this.create({
+      calendarId, startTime, endTime,
+      eventName, description, access,
+      location, colour
+    });
 
     try{
-      await event.save();
+      await this.save(event);
+      return event;
     } catch(err) {
       console.log(err);
       throw new InternalServerErrorException('Server error occurred');
     }
-
-    return event;
   }
 
   async updateEvent(userId: number,updateEventDto: UpdateEventDto): Promise<Event> {

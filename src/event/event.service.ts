@@ -42,17 +42,8 @@ export class EventService {
   }
 
   async createEvent(
-    headers: string,
-    userId: number,
-    createEventDto: CreateEventDto
+    createEventDto: CreateEventDto,
   ): Promise<Event> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
     return this.eventRepository.createEvent(createEventDto);
   }
 
