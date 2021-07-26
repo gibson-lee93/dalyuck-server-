@@ -26,63 +26,27 @@ export class EventService {
     return user.attendEvents;
   }
 
-  async getEvent(
-    headers: string,
-    userId: number,
+  async getEvents(
     calendarId: number
   ): Promise<Event[]> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
     return await this.eventRepository.find({ calendarId });
   }
 
   async createEvent(
-    headers: string,
-    userId: number,
-    createEventDto: CreateEventDto
+    createEventDto: CreateEventDto,
   ): Promise<Event> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
     return this.eventRepository.createEvent(createEventDto);
   }
 
   async updateEvent(
-    headers: string,
-    userId: number,
     updateEventDto: UpdateEventDto
   ): Promise<Event> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
-    return this.eventRepository.updateEvent(userId, updateEventDto);
+    return this.eventRepository.updateEvent(updateEventDto);
   }
 
   async deleteEvent(
-    headers: string,
-    userId: number,
     eventId: number
   ): Promise<void> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
     const result = await this.eventRepository.delete({ id: eventId });
 
     if(result.affected === 0) {
