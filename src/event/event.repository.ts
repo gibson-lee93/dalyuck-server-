@@ -30,7 +30,7 @@ export class EventRepository extends Repository<Event> {
     }
   }
 
-  async updateEvent(userId: number,updateEventDto: UpdateEventDto): Promise<Event> {
+  async updateEvent(updateEventDto: UpdateEventDto): Promise<Event> {
     const {
       calendarId, startTime, endTime,
       eventName, description, access,
@@ -53,11 +53,10 @@ export class EventRepository extends Repository<Event> {
 
     try{
       await event.save();
+      return event;
     } catch(err) {
       console.log(err);
       throw new InternalServerErrorException('Server error occurred');
     }
-
-    return event;
   }
 }

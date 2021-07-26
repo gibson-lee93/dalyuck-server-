@@ -68,11 +68,9 @@ export class EventController {
 
   @Patch()
   updateEvent(
-    @Headers('authorization') headers: string,
-    @Body('userId') userId: number,
     @Body() updateEventDto: UpdateEventDto
   ): Promise<Event> {
-    return this.eventService.updateEvent(headers, userId, updateEventDto);
+    return this.eventService.updateEvent(updateEventDto);
   }
 
   @Delete()

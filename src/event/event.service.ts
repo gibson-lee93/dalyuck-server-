@@ -48,18 +48,9 @@ export class EventService {
   }
 
   async updateEvent(
-    headers: string,
-    userId: number,
     updateEventDto: UpdateEventDto
   ): Promise<Event> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
-    return this.eventRepository.updateEvent(userId, updateEventDto);
+    return this.eventRepository.updateEvent(updateEventDto);
   }
 
   async deleteEvent(
