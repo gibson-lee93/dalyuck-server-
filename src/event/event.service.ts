@@ -26,18 +26,9 @@ export class EventService {
     return user.attendEvents;
   }
 
-  async getEvent(
-    headers: string,
-    userId: number,
+  async getEvents(
     calendarId: number
   ): Promise<Event[]> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
     return await this.eventRepository.find({ calendarId });
   }
 
@@ -54,17 +45,8 @@ export class EventService {
   }
 
   async deleteEvent(
-    headers: string,
-    userId: number,
     eventId: number
   ): Promise<void> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
     const result = await this.eventRepository.delete({ id: eventId });
 
     if(result.affected === 0) {
