@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Delete,
-  Headers,
   ParseIntPipe,
   Param,
   Inject,
@@ -32,11 +31,9 @@ export class EventController {
 
   @Post('/attend')
   sendAttendRequest(
-    @Headers('authorization') headers: string,
-    @Body('userId') userId: number,
     @Body() sendAttendRequestDto: SendAttendRequestDto
   ): Promise<void> {
-    return this.attendRequestService.sendAttendRequest(headers, userId, sendAttendRequestDto);
+    return this.attendRequestService.sendAttendRequest(sendAttendRequestDto);
   }
 
   @Get('/attendant')

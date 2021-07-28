@@ -1,7 +1,6 @@
-import { Injectable, UnauthorizedException, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AttendRequestRepository } from './attend-request.repository';
-import { checkToken } from '../function/token/createToken';
 import { MailerService } from '@nestjs-modules/mailer';
 import { SendAttendRequestDto } from './dto/send-attend-request.dto';
 import { User } from '../user/user.entity';
@@ -17,17 +16,8 @@ export class AttendRequestService {
   ) {}
 
   async sendAttendRequest(
-    headers: string,
-    userId: number,
     sendAttendRequestDto: SendAttendRequestDto
   ): Promise<void> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
     const { requesterEmail, requesteeEmail, eventId } = sendAttendRequestDto;
     const user = await User.findOne({ email: requesteeEmail });
 
