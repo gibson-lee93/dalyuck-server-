@@ -1,10 +1,9 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './event.entity';
 import { EventRepository } from './event.repository';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
-import { checkToken } from '../function/token/createToken';
 import { User } from '../user/user.entity';
 
 @Injectable()
@@ -14,15 +13,8 @@ export class EventService {
     private eventRepository: EventRepository
   ) {}
 
-  async getAttendEvent(headers: string, userId: number): Promise<Event[]> {
-    const token = headers.split(" ")[1];
-    const checkHeaderToken = await checkToken(token, userId);
-
-    if(checkHeaderToken.error){
-      throw new UnauthorizedException(checkHeaderToken.message);
-    }
-
-    const user = await User.findOne({ id: userId });
+  async getAttendEvent(id: number): Promise<Event[]> {
+    const user = await User.findOne({ id });
     return user.attendEvents;
   }
 
