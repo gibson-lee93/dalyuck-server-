@@ -5,10 +5,8 @@ import {
   Body,
   Patch,
   Delete,
-  Headers,
   ParseIntPipe,
   Param,
-  HttpCode,
   Inject,
   UseGuards
 } from '@nestjs/common';
@@ -33,24 +31,17 @@ export class EventController {
 
   @Post('/attend')
   sendAttendRequest(
-    @Headers('authorization') headers: string,
-    @Body('userId') userId: number,
     @Body() sendAttendRequestDto: SendAttendRequestDto
   ): Promise<void> {
-    return this.attendRequestService.sendAttendRequest(headers, userId, sendAttendRequestDto);
+    return this.attendRequestService.sendAttendRequest(sendAttendRequestDto);
   }
 
-  @Post('/attendant')
-  @HttpCode(200)
-  getAttendEvent(
-    @Headers('authorization') headers: string,
-    @Body('userId', ParseIntPipe) userId: number,
-  ): Promise<Event[]> {
-    return this.eventService.getAttendEvent(headers, userId);
+  @Get('/attendant')
+  getAttendEvent(@GetUser() user: User): Promise<Event[]> {
+    return this.eventService.getAttendEvent(user.id);
   }
 
   @Get('/:id')
-  // @HttpCode(200)
   getEvents(
     @Param('id', ParseIntPipe) calendarId: number
   ): Promise<Event[]> {
